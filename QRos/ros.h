@@ -7,6 +7,7 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <QDebug>
+#include <rapidjson/allocators.h>
 #include "topic.h"
 #include "msg_I.h"
 

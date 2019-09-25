@@ -12,21 +12,22 @@ QRos::QRos(std::string ip_arg, int port_arg){
 }
 
 void QRos::publish(Topic t){
-    std::string encodedData = "{'type' : 'topic', ";
-    encodedData += "'name' : '" + t.get_name()+"',";
-    encodedData += "'msg-type' : '" + t.get_msg()->get_Type()+"',";
-    encodedData += "'msg' : " + t.get_msg()->encode()+" }\n";
+    std::string encodedData = "{\"type\" : \"topic\", ";
+    encodedData += "\"name\" : \"" + t.get_name()+"\",";
+    encodedData += "\"msg-type\" : \"" + t.get_msg()->get_Type()+"\",";
+    encodedData += "\"msg\" : " + t.get_msg()->encode()+" }";
     socket->write(encodedData.c_str());
     socket->waitForBytesWritten(100);
 }
 
 void QRos::subscrib(std::string topic_name){
-    std::string request = "{'type' : 'topic_subscribe', 'name' : '"+topic_name+"'}";
+    std::string request = "{\"type\" : \"topic_subscribe\", \"name\" : \""+topic_name+"\"}";
     socket->write(request.c_str());
     socket->waitForBytesWritten(100);
 }
 
 void QRos::handel_response(){
     QByteArray data = socket->readAll();
-    qDebug() << data;
+    jute::jValue json = jute::parser::parse("{\"type\" : \"topic\", \"name\" : \"test\",\"msg-type\" : \"std_msgs/String\",\"msg\" : {\"String\" : \"test string\"}");
+    qDebug() << QString::fromStdString(json["type"].as_string());
 }
