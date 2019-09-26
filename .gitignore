@@ -75,3 +75,4 @@ Thumbs.db
 QRos/test.cpp
 QRos/test
 *.zip
+.vscode/

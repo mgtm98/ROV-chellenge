@@ -2,7 +2,6 @@
 #define MSG_I_H
 
 #include <string>
-
 class msg_I{
 public:
     virtual std::string encode(){
@@ -13,5 +12,8 @@ public:
     }
     virtual ~msg_I(){}
 };
+
+
+
 
 #endif // MSG_I_H
