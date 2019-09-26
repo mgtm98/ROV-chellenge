@@ -1,6 +1,10 @@
 import time
 import adafruit_pca9685
 import motion
+import sensor
+import motors
+import camera
+import network
 #constants
 iniFallingValue = 200
 
