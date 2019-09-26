@@ -1,11 +1,10 @@
 import rospy
 import json
 import threading
-from network_config import generate_handeler
+from network_config import get_handeler, msgTypes, topics, subscribers, setServer
 from server import Server
 
-topics = {}
-subscribers = {}
+
 
 def recive_Data(data):
     json_data = json.loads(data[0])
@@ -17,11 +16,16 @@ def recive_Data(data):
 
 def subscribe(data, port):
     if not(data["topic_name"] in subscribers):
-        subscribers[data["topic_name"]] = [[],False]
+        subscribers[data["topic_name"]] = [[],False,data["msg-type"]]
     if not(port in subscribers[data["topic_name"]]):
         subscribers[data["topic_name"]][0].append(port)
         update()
 
+def client_dissconnected(port):
+    print(subscribers)
+    for k in subscribers:
+        if port in subscribers[k][0]:
+            subscribers[k][0].remove(port)
 
 def publish(data):
     if(data["msg-type"] == "std_msgs/String"):
@@ -44,12 +48,21 @@ def publish(data):
 def update():
     for topic_name in subscribers:
         if not subscribers[topic_name][1]:
-            threading.Thread(target = threadHandel(topic_name), args = []).start()
+            subscribers[topic_name][1] = True
+            args = {
+                "topic_name" : topic_name,
+                "msg-type" : subscribers[topic_name][2]
+            }
+            threading.Thread(target = threadHandel, args = [args]).start()
 
-def threadHandel(topic_name):
-    return generate_handeler(topic_name)
+def threadHandel(args):
+    rospy.Subscriber(args["topic_name"], msgTypes[args["msg-type"]], get_handeler(args["topic_name"]))
+    rospy.spin()
+
 
 rospy.init_node("Network")
-s = Server("127.0.0.1",8006)
+s = Server("127.0.0.1",8008)
 s.onRecive(recive_Data)
+s.onDissconnect(client_dissconnected)
+setServer(s)
 s.start()

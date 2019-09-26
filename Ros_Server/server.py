@@ -1,27 +1,35 @@
 import socket
 import threading
 import select
+import time
 
 def client(args): 
     conn = args["conn"]
     port = args["port"]
     client_table = args["client_table"]
     recive_Data = args["onRecive"]
+    client_dissconnected = args["dissconnected"]
     while True:
         ready = select.select([conn], [conn], [], 0.1)
         if ready[0]:
-            data = conn.recv(1024).decode()
-            if(len(data) == 0):
-                print("[INFO]    Disconnected")
-                conn.close()
-                del client_table[port]
-                break
+            try:
+                data = conn.recv(1024).decode()
+                if(len(data) == 0):
+                    print("[INFO]    Disconnected")
+                    client_dissconnected(port)
+                    conn.close()
+                    del client_table[port]
+                    break
+            except :
+                print("error happened")
             if(data):
                 # print("[RECIVED] "+data)
                 recive_Data((data,port))
         if ready[1]:
             if(not client_table[port] == None):
+                print(client_table[port])
                 conn.send(client_table[port].encode())
+                client_table[port] = None
 
 class Server:
 
@@ -32,6 +40,9 @@ class Server:
                     
     def onRecive(self, handeler):
         self.reciveData = handeler
+
+    def onDissconnect(self,handeler):
+        self.client_dissconnected = handeler
     
     def start(self):
         soc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -48,9 +59,11 @@ class Server:
             args["port"] = str(addr[1])
             args["conn"] = conn
             args["onRecive"] = self.reciveData
+            args["dissconnected"] = self.client_dissconnected
             self.client_table[str(addr[1])] = None
             print("[INFO]    Client Connected")
             threading.Thread(target=client,args=[args]).start()
+            # time.sleep(0.01)
 
     def send_Data(self, port, data):
         self.client_table[port] = data
