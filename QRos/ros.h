@@ -18,7 +18,7 @@ class QRos : public QObject {
 public:
      QRos(std::string,unsigned short);
      void publish(Topic);
-     void subscrib(std::string,void handler(msg_I*));
+     void subscrib(std::string, std::string, void handler(msg_I*));
 
 private:
      QTcpSocket *socket;

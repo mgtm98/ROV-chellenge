@@ -10,3 +10,16 @@ std::string std_String::encode(){
 std::string std_String::get_Type(){
     return "std_msgs/String";
 }
+
+std_Empty::std_Empty(){
+}
+
+std::string std_Empty::encode(){
+    return "{\"Data\" : \"Empty\"}";
+}
+
+std::string std_Empty::get_Type(){
+    return "std_msgs/Empty";
+}
+
+

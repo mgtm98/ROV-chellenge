@@ -6,15 +6,18 @@
 #include <QDebug>
 
 void test(msg_I *msg){
-    std_String *message =(std_String *) msg;
-    qDebug() << QString::fromStdString(message->data);
+    std_Empty *message =(std_Empty *) msg;
+    qDebug() << "Empty Response";
 }
 int main(int argc, char *argv[]){
     QCoreApplication a(argc, argv);
-    QRos ros("127.0.0.1",8005);
-    Topic t ("test", new std_String("test string"));
+    QRos ros("127.0.0.1",8006);
+    Topic t ("Salary", new std_Empty());
+    ros.publish(t);
+//    ros.subscrib("Salary", "std_msgs/Empty", *test);
 //    ros.publish(t);
-    ros.subscrib("test",*test);
+//    ros.publish(t);
+//    ros.publish(t);
     qDebug() << "started";
     return a.exec();
 }
