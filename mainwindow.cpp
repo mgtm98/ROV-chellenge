@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     initItems();
+    my_joy = new joystick();
 }
 
 MainWindow::~MainWindow()

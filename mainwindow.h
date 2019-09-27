@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
+#include "joystick.h"
 namespace Ui {
 class MainWindow;
 }
@@ -31,6 +32,7 @@ private:
     QVBoxLayout * verLeftLayout,*verRightLayout;
     QHBoxLayout * horLayout,*timerLayout;
     unsigned int seconds=0,minutes=0;
+    joystick * my_joy;
 
 };
 
