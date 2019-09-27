@@ -44,7 +44,7 @@ void MainWindow::initItems()
     buttonSettings = new QLabel("Settings");
     sensorReadings = new QLabel("Sensor Readings");
     sensorReadings->setFont(f3);
-    stopWatch = new QLabel("");
+   // gstream();
     verLeftLayout ->addWidget(buttonSettings);
     verLeftLayout ->addWidget(light);
     verLeftLayout ->addWidget(up);
@@ -73,3 +73,29 @@ void MainWindow::sWatchHandler()
     time->setText(timeText);
 
 }
+
+
+void MainWindow::gstream()
+{
+    videoWidget = new QVideoWidget;
+    player = new QMediaPlayer;
+    process = new QProcess;
+    verLeftLayout ->addWidget(videoWidget);
+    QString program = "gst-launch-1.0";
+    QStringList arguments;
+    // QMediaPlayer expects encoded data
+    arguments << "-v" << "videotestsrc" << "!" << "video/x-raw,width=1280,height=720"
+              << "!" << "decodebin" << "!" << "x264enc" << "!" << "filesink" << "location=/dev/stderr";
+
+   // arguments << "-v" << "tcpclientsrc" << "host=192.168.1.1" << "port=9999" << "!" << "gdpdepay" << "!" << "rtpht264depay"
+             // << "!" << "ffdec_h264" << "!" << "ffmpegcolorspace" << "!" << "autovideosink" << "sync=false";
+
+    process->setReadChannel(QProcess::StandardError);
+    process->start(program, arguments);
+    process->waitForReadyRead();
+
+    player->setMedia(QMediaContent(), process);
+    player->play();
+    player->setVideoOutput(videoWidget);
+}
+

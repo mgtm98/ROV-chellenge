@@ -12,6 +12,10 @@
 #include "joystick.h"
 #include <QTimer>
 #include <QTime>
+#include <QMediaPlayer>
+#include <QVideoWidget>
+#include <QProcess>
+
 namespace Ui {
 class MainWindow;
 }
@@ -23,13 +27,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     void initItems();
+    void gstream();
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
     QPushButton * automationBtn,*coinsBtn,*shapeDetectionBtn;
     QLabel * sensorReadings,*depth,*mode,*temp,*tempValue,*depthValue,*light,*up,*down,*buttonSettings,*time;
-    QLabel *stopWatch;
     QWidget *centralWidget;
     QVBoxLayout * verLeftLayout,*verRightLayout;
     QHBoxLayout * horLayout;
@@ -38,8 +42,13 @@ private:
     QTimer *timer;
     QTime *timeVal;
     QString timeText;
+    QVideoWidget *videoWidget;
+    QMediaPlayer *player ;
+    QProcess *process ;
 private slots:
     void sWatchHandler();
+
+
 };
 
 #endif // MAINWINDOW_H
