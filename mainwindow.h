@@ -10,6 +10,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "joystick.h"
+#include <QTimer>
+#include <QTime>
 namespace Ui {
 class MainWindow;
 }
@@ -27,13 +29,17 @@ private:
     Ui::MainWindow *ui;
     QPushButton * automationBtn,*coinsBtn,*shapeDetectionBtn;
     QLabel * sensorReadings,*depth,*mode,*temp,*tempValue,*depthValue,*light,*up,*down,*buttonSettings,*time;
-    QLabel *min2,*sec1,*sec2,*min1,*separator;
+    QLabel *stopWatch;
     QWidget *centralWidget;
     QVBoxLayout * verLeftLayout,*verRightLayout;
-    QHBoxLayout * horLayout,*timerLayout;
-    unsigned int seconds=0,minutes=0;
+    QHBoxLayout * horLayout;
+    int seconds=0,minutes=20;
     joystick * my_joy;
-
+    QTimer *timer;
+    QTime *timeVal;
+    QString timeText;
+private slots:
+    void sWatchHandler();
 };
 
 #endif // MAINWINDOW_H
