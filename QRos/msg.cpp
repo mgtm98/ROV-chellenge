@@ -1,4 +1,4 @@
-#include "msgs.h"
+#include "msg.h"
 
 std_String::std_String(std::string data):data(data){
 }

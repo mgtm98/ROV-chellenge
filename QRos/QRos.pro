@@ -17,14 +17,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        msgs.cpp \
+        msg.cpp \
         ros.cpp \
+        service.cpp \
+        srv_.cpp \
         topic.cpp
 
 HEADERS += \
-        msg_I.h \
-        msgs.h \
+        msg.h \
         ros.h \
+        service.h \
+        srv_.h \
         topic.h
 
 # Default rules for deployment.

@@ -1,23 +1,21 @@
 #include <QCoreApplication>
 #include "ros.h"
-#include "msgs.h"
-#include "msg_I.h"
+#include "msg.h"
 #include "topic.h"
 #include <QDebug>
+#include <QTimer>
 
-void test(msg_I *msg){
-    std_Empty *message =(std_Empty *) msg;
-    qDebug() << "Empty Response";
+void call(srv_resp_I *t){
+    test_srv_resp *a = (test_srv_resp *)t;
+    qDebug() << QString::fromStdString(a->output) ;
 }
 int main(int argc, char *argv[]){
     QCoreApplication a(argc, argv);
-    QRos ros("127.0.0.1",8006);
-    Topic t ("Salary", new std_Empty());
-    ros.publish(t);
-//    ros.subscrib("Salary", "std_msgs/Empty", *test);
+
+    QRos ros("127.0.0.1",8009);
+//    Topic t ("Time", new std_String("Time now is"));
 //    ros.publish(t);
-//    ros.publish(t);
-//    ros.publish(t);
-    qDebug() << "started";
+    Service s("test", new test_srv("testReqParm"));
+    ros.send_request(&s,call);
     return a.exec();
 }

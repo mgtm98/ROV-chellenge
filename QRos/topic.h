@@ -1,10 +1,11 @@
 #ifndef TOPIC_H
 #define TOPIC_H
 
-#include "msg_I.h"
+#include "msg.h"
 #include <string.h>
 
 class Topic{
+
 private:
     std::string name;
     msg_I *msg;

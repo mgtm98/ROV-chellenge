@@ -10,22 +10,29 @@
 #include <QTextCodec>
 #include <rapidjson/document.h>
 #include "topic.h"
-#include "msg_I.h"
-#include "msgs.h"
+#include "msg.h"
+#include "service.h"
+#include "srv_.h"
+
 
 class QRos : public QObject {
     Q_OBJECT
 public:
      QRos(std::string,unsigned short);
-     void publish(Topic);
+     void publish(Topic *);
+     void publish(Topic &);
      void subscrib(std::string, std::string, void handler(msg_I*));
+     void send_request(Service *, void handler(srv_resp_I*));
 
 private:
      QTcpSocket *socket;
      std::map<std::string, void (*)(msg_I*)> subscriber_table;
+     std::map<std::string, void (*)(srv_resp_I*)> srv_response_table;
      std::string ip;
      int port;
      msg_I *creatMsg(rapidjson::Value::Object);
+     srv_resp_I *creatResp(rapidjson::Value::Object);
+     void send(std::string);
 
 private slots:
     void handel_response();
