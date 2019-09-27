@@ -10,6 +10,11 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "joystick.h"
+
+#include <QMediaPlayer>
+#include <QVideoWidget>
+#include <QProcess>
+
 namespace Ui {
 class MainWindow;
 }
@@ -21,6 +26,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     void initItems();
+    void gstream();
     ~MainWindow();
 
 private:
@@ -33,6 +39,10 @@ private:
     QHBoxLayout * horLayout,*timerLayout;
     unsigned int seconds=0,minutes=0;
     joystick * my_joy;
+
+    QVideoWidget *videoWidget;
+    QMediaPlayer *player ;
+    QProcess *process ;
 
 };
 

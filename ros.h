@@ -25,7 +25,7 @@ private:
      std::map<std::string, void (*)(msg_I*)> subscriber_table;
      std::string ip;
      int port;
-     msg_I *creatMsg(rapidjson::Value::Object);
+//     msg_I *creatMsg(rapidjson::Value::Object);
 
 private slots:
     void handel_response();
