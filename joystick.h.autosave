@@ -1,0 +1,27 @@
+#ifndef JOYSTICKCLASS_H
+#define JOYSTICKCLASS_H
+
+#include <QObject>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_joystick.h"
+#include "QDebug"
+#include <QThread>
+#include <QTimer>
+class joystick : public QObject
+{
+    Q_OBJECT
+private:
+    SDL_Joystick * joy;
+    QTimer * timer;
+    SDL_Event * event;
+public:
+    explicit joystick(QObject *parent = nullptr);
+
+signals:
+
+public slots:
+    void joystick_update();
+
+};
+
+#endif // JOYSTICKCLASS_H

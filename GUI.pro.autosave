@@ -44,6 +44,8 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
+LIBS += -L/usr/local/lib -lSDL2
+INCLUDEPATH += /usr/local/include
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
