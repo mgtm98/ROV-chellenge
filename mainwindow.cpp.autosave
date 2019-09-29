@@ -207,7 +207,7 @@ void MainWindow::gstream()
 void MainWindow::autoBtnPressed()
 {
     isAuto = true;
-    Topic motors ("Salary", new std_String("T"));
+    Topic motors ("Auto", new std_String("T"));
     this->ros->publish(motors);
 
 }
