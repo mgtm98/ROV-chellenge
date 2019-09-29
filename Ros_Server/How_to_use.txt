@@ -1,0 +1,18 @@
+network_ros.py is used to iniate a tcp server to communicate with QRos Class 
+
+Configrations to be done
+
+1) msgTypes:
+    is a dictionary <String,Class> pairs to link the msg class just add the msgType (string) which will be sent from QRos as a key and msg Class as the value
+    ex.
+        "Twist" : geometry_msgs.msg.Twist
+
+2) srvTypes:
+    like msgTypes but for srv Classes
+
+3) subscribe_handlers_table :
+    is a dictionary <"string",function> pairs to link a callback function which will be called when a data is availabe
+
+4) services_handlers_table:
+    like subscribe_handlers_table but for srv callback
+

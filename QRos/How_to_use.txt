@@ -1,0 +1,57 @@
+HOW TO USE QRos ....
+1- QRos is used to make a communication between ROS and nonRos device (like a laptop and a ROS robot)
+2- QRos dependes on QTcpSocket as it's made to be used with QT 
+
+A) QRos Class
+    QRos::QRos(String ip,unsigned short port)
+        ip   --> ip Adress of the server running in ROS machine
+        port --> the port which the server uses
+    QRos::publish(Topic &t OR *t)
+        used to publish a Topic t
+        t    --> is a refrence/pointer to the topic you want to publish
+    QRos::subscribe(String topicName, String msgType, void(*)(msg_I*))
+        used to subscrib to a topic and calling a callback function
+            topicName --> topic name to subscrib to
+            msgType   --> type of message recived from the topic
+            callback  --> function to call when the msg is recived (takes a msg_I parameter)
+    QRos::send_request(Service *s, void handler(srv_resp_I*))
+        used to send a request to Service s and call a callback function with the response
+        s       --> type of Service to be requested
+        handler --> function to be called when the response is ready (takes srv_resp_I as a parameter) 
+
+B) Topic Class
+    Topic::Topic(String n, msg_I *m)
+        n --> the name of the topic
+        m --> msg to be published
+    Topic::get_name()
+        returns (String) the topic name
+    Topic::get_msg();
+        returns a pointer the msg 
+    Topic::get_msgType
+        returns a String with the msg type
+
+C) msg_I Interface Class
+    to make a custom msg class u must public inharit this interface and override encode and get_Type 
+    msg_I::encode()
+        used to encode the msg Data to a json format
+        Example : msg of type Twist takes (int x_speed, int y_speed, int z_speed)
+            outpust json must be :
+            {
+                "x_speed" : x_speed Value,
+                "y_speed" : y_speed Value,
+                "z_speed" : z_speed Value,
+            }
+    msg_I::get_Type()
+        returns the msgType
+
+D) srv_resp_I Interface Class
+    to make a custom service class u must public inharit this interface and override encode
+    srv_resp_I::encode()
+        used to encode the srv data to a json format
+        Example test srv with string request parameter named input
+        {"input" : String}
+
+To make QRos able to communicate with ros you must run network_ros.py file as it creats a network node which is the real publisher and subscriber !!
+there are some configrations needed to be done in network_config.py
+
+in ros.cpp extend creatMsg and creatResp methods to build the response object which will be passed to the handler
