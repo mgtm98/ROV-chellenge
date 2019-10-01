@@ -39,6 +39,7 @@ def getCoordinates(data):
 	rightBackMotor.updatePWM(rightBackPwm)
 `	verticalMotor1.updatePWM(verticalPWM)
 	verticalMotor2.updatePWM(verticalPWM)
+
 def cameraMove(data):	
 	camera1.move()
 	camera2.move()
