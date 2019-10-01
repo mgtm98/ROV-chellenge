@@ -48,7 +48,8 @@ FORMS += \
 
 LIBS += -L/usr/local/lib -lSDL2
 INCLUDEPATH += /usr/local/include
-INCLUDEPATH += /usr/include/gstreamer-1.0/gst
+INCLUDEPATH += /usr/include/Qt5GStreamer-1.0
+INCLUDEPATH += /usr/include/gstreamer-1.0
 
 CONFIG += link_pkgconfig
 PKGCONFIG += Qt5GLib-2.0  Qt5GStreamer-1.0 Qt5GStreamerUi-1.0 Qt5GStreamerUtils-1.0
