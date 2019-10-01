@@ -15,7 +15,8 @@ public:
 
 class std_String : public msg_I{
 //        type : std_msgs/String
-//        data : String
+//        data : {String
+//               }
 public:
     std_String(std::string);
     std::string encode();
@@ -30,6 +31,38 @@ public:
     std::string encode() ;
     std::string get_Type();
 };
+
+class pln_motion: public msg_I{
+//    type : rov20/pln_motion
+public:
+    pln_motion(int,int);
+    std::string encode() ;
+    std::string get_Type();
+    int x_speed;
+    int y_speed;
+};
+
+class z_motion: public msg_I{
+//    type : rov20/z_motion
+public:
+    z_motion(int);
+    std::string encode() ;
+    std::string get_Type();
+    int z_speed;
+
+};
+
+class raw_data: public msg_I{
+//    type : rov20/row_data
+public:
+    raw_data(int,int,int);
+    std::string encode() ;
+    std::string get_Type();
+    int x_speed;
+    int y_speed;
+    int z_speed;
+};
+
 
 
 
