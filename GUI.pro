@@ -31,7 +31,8 @@ SOURCES += \
     topic.cpp \
     ros.cpp \
     msgs.cpp \
-    joystick.cpp
+    joystick.cpp \
+    player.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,13 +40,19 @@ HEADERS += \
     ros.h \
     msg_I.h \
     msgs.h \
-    joystick.h
+    joystick.h \
+    player.h
 
 FORMS += \
         mainwindow.ui
 
 LIBS += -L/usr/local/lib -lSDL2
 INCLUDEPATH += /usr/local/include
+INCLUDEPATH += /usr/include/gstreamer-1.0/gst
+
+CONFIG += link_pkgconfig
+PKGCONFIG += Qt5GLib-2.0  Qt5GStreamer-1.0 Qt5GStreamerUi-1.0 Qt5GStreamerUtils-1.0
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
