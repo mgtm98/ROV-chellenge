@@ -1,5 +1,7 @@
 import time
 import adafruit_pca9685
+from board import SCL, SDA
+import busio
 import motion
 from motors import *
 from camera import *
@@ -10,9 +12,11 @@ from std_msgs.msg import String, Empty
 iniFallingValue = 100
 
 #initialize hat
-hat = adafruit_pca9685.PCA9685()
-pwm = PWM(0x40)
-pwm.setPWMFreq(50)
+i2c_bus = busio.I2C(SCL, SDA)
+hat = adafruit_pca9685.PCA9685(i2c_bus)
+# pwm = adafruit_pca9685.PWM(0x40)
+# pwm.setPWMFreq(50)
+hat.frequency = 50
 
 #initialize hardware devices
 leftFrontMotor = Motor(hat, 'LeftFrontMotor', 0, iniFallingValue)
@@ -31,11 +35,11 @@ if __name__ == "__main__":
 	rospy.Subscriber("cameras",Empty,cameraMove)
 	rospy.spin()
 
-def getCoordinates(data):
+def getCoordinates(x, y):
 	#get x,y from qt	
 	#controlX(x)
     #controlY(y)
-	if  x ==0 and y>0 :
+	if  x == 0 and y>0 :
 		pwm = abs(y/320)
 		upMovement(pwm)
 	elif x ==0 and y<0 :
@@ -57,7 +61,7 @@ def getCoordinates(data):
 	#leftBackMotor.updatePWM(leftBackPwm)
 	#rightFrontMotor.updatePWM(rightFrontPwm)
 	#rightBackMotor.updatePWM(rightBackPwm)
-`	verticalMotor1.updatePWM(verticalPWM)
+	# verticalMotor1.updatePWM(verticalPWM)
 	verticalMotor2.updatePWM(verticalPWM)
 	last_x = x
 	last_y = y
@@ -66,33 +70,33 @@ def cameraMove(data):
 	camera2.move()
 
 def upMovement(pwm):
-		frontRightMotor.anticlockWise(pwm)
-    	frontLeftMotor.clockWise(pwm)
-   	 	backRightMotor.anticlockWise(pwm)
-    	backlefttMotor.clockWise(pwm)
+	frontRightMotor.anticlockWise(pwm)
+	frontLeftMotor.clockWise(pwm)
+	backRightMotor.anticlockWise(pwm)
+	backlefttMotor.clockWise(pwm)
 def downMovement(pwm):
-		frontRightMotor.clockWise(pwm)
-    	frontLeftMotor.anticlockWise(pwm)
-    	backRightMotor.clockWise(pwm)
-    	backlefttMotor.anticlockWise(pwm)
+	frontRightMotor.clockWise(pwm)
+	frontLeftMotor.anticlockWise(pwm)
+	backRightMotor.clockWise(pwm)
+	backlefttMotor.anticlockWise(pwm)
 def leftMovement(pwm):
-		frontRightMotor.anticlockWise(pwm)
-    	frontLeftMotor.anticlockWise(pwm)
-    	backRightMotor.clockWise(pwm)
-    	backlefttMotor.clockWise(pwm)
+	frontRightMotor.anticlockWise(pwm)
+	frontLeftMotor.anticlockWise(pwm)
+	backRightMotor.clockWise(pwm)
+	backlefttMotor.clockWise(pwm)
 def rightMovement(pwm):
-		frontRightMotor.clockWise(pwm)
-    	frontLeftMotor.clockWise(pwm)
-    	backRightMotor.anticlockWise(pwm)
-    	backlefttMotor.anticlockWise(pwm)
+	frontRightMotor.clockWise(pwm)
+	frontLeftMotor.clockWise(pwm)
+	backRightMotor.anticlockWise(pwm)
+	backlefttMotor.anticlockWise(pwm)
 def clockMovement(pwm):
-		frontRightMotor.clockWise(pwm)
-    	frontLeftMotor.clockWise(pwm)
-   	 	backRightMotor.clockWise(pwm)
-    	backlefttMotor.clockWise(pwm)
+	frontRightMotor.clockWise(pwm)
+	frontLeftMotor.clockWise(pwm)
+	backRightMotor.clockWise(pwm)
+	backlefttMotor.clockWise(pwm)
 def anticlockMovement(pwm):
-		frontRightMotor.anticlockWise(pwm)
-    	frontLeftMotor.anticlockWise(pwm)
-   	 	backRightMotor.anticlockWise(pwm)
-    	backlefttMotor.anticlockWise(pwm)
+	frontRightMotor.anticlockWise(pwm)
+	frontLeftMotor.anticlockWise(pwm)
+	backRightMotor.anticlockWise(pwm)
+	backlefttMotor.anticlockWise(pwm)
 

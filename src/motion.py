@@ -2,7 +2,9 @@
 from rov20.msg import pln_motion, z_motion
 from motor import Motor
 import rospy
-import Adafruit_PCA9685
+from board import SCL, SDA
+import busio
+from adafruit_pca9685 import PCA9685
 
 def controlHandeler(pln_motionMsg):
     x_movement(pln_motionMsg.x_speed)
@@ -27,8 +29,12 @@ if __name__ == "__main__":
     rospy.init_node("motion")
     rospy.Subscriber("control", pln_motion, controlHandeler)
     rospy.Subscriber("depthControl", z_motion, depthHandeler)
-    hat = Adafruit_PCA9685.PCA9685()               #initalizing Adafruit hat with default address 0x40
-    hat.setPWMFreq(50)                             #setting pwm freq to 50 hz
+    # hat = adafruit_pca9685.PCA9685()               #initalizing Adafruit hat with default address 0x40
+    # hat.setPWMFreq(50)                             #setting pwm freq to 50 hz
+    i2c_bus = busio.I2C(SCL, SDA)
+    hat = PCA9685(i2c_bus)
+    hat.frequency = 50
+    
     frontRightMotor = Motor(hat,0,0)
     backRightMotor = Motor(hat,1,0)
     frontLeftMotor = Motor(hat,2,0)
