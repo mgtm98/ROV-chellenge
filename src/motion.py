@@ -34,7 +34,7 @@ if __name__ == "__main__":
     i2c_bus = busio.I2C(SCL, SDA)
     hat = PCA9685(i2c_bus)
     hat.frequency = 50
-    
+
     frontRightMotor = Motor(hat,0,0)
     backRightMotor = Motor(hat,1,0)
     frontLeftMotor = Motor(hat,2,0)

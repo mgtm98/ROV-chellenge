@@ -36,7 +36,31 @@ if __name__ == "__main__":
 	rospy.Subscriber("cameras",Empty,cameraMove)
 	rospy.spin()
 
-def getCoordinates(x, y):
+def mapCoordinates(x, y):
+    # expected range -300 : 300
+	stick_range = 300
+	dead_zone = 50
+
+	if abs(x) < dead_zone :
+		x_pwm = 0
+	else :
+		x_pwm = (abs(x) - dead_zone) / (stick_range - dead_zone)
+
+	if abs(y) < dead_zone :
+		y_pwm = 0
+	else :
+		y_pwm = (abs(y) - dead_zone) / (stick_range - dead_zone)
+
+	if x > 0 : right = 1
+	else : right = 0
+
+	if y > 0 : up = 1
+	else : up = 0
+
+	return x_pwm, y_pwm, right, up
+
+
+def getCoordinates(x, y):	
 	#get x,y from qt	
 	#controlX(x)
     #controlY(y)
