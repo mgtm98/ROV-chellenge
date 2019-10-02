@@ -48,11 +48,13 @@ FORMS += \
 
 LIBS += -L/usr/local/lib -lSDL2
 INCLUDEPATH += /usr/local/include
+INCLUDEPATH += /usr/include/Qt5GStreamer-1.0/QGst
+INCLUDEPATH += /usr/include/Qt5GStreamer-1.0/QGlib
 INCLUDEPATH += /usr/include/Qt5GStreamer-1.0
 INCLUDEPATH += /usr/include/gstreamer-1.0
 
 CONFIG += link_pkgconfig
-PKGCONFIG += Qt5GLib-2.0  Qt5GStreamer-1.0 Qt5GStreamerUi-1.0 Qt5GStreamerUtils-1.0
+PKGCONFIG +=   Qt5GStreamer-1.0 Qt5GStreamerUi-1.0  gstreamer-1.0 gstreamer-video-1.0 Qt5GLib-2.0
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

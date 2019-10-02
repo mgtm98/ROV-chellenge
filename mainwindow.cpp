@@ -183,9 +183,10 @@ void MainWindow::sWatchHandler()
 
 void MainWindow::autoBtnPressed()
 {
-    isAuto = true;
+    m_player1->takeSnapshot();
+   /* isAuto = true;
     Topic motors ("Auto", new std_String("T"));
-    this->ros->publish(motors);
+    this->ros->publish(motors);*/
 
 }
 void MainWindow::countCoinsBtnPressed()

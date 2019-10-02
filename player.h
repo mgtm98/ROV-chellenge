@@ -4,6 +4,7 @@
 #include <QTime>
 #include <QGst/Pipeline>
 #include <QGst/Ui/VideoWidget>
+#include <QMessageBox>
 class Player : public QGst::Ui::VideoWidget
 {
     Q_OBJECT
@@ -17,6 +18,7 @@ public Q_SLOTS:
     void play();
     void pause();
     void stop();
+    void takeSnapshot();
 Q_SIGNALS:
     void stateChanged();
 private:
@@ -24,5 +26,7 @@ private:
     void handlePipelineStateChange(const QGst::StateChangedMessagePtr & scm);
     QGst::PipelinePtr m_pipeline;
     QTimer m_positionTimer;
+    QGst::ElementPtr m_source;
+    QGst::ElementPtr m_videoSink;
 };
 #endif

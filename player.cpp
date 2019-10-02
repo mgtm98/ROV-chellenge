@@ -11,12 +11,49 @@
 #include <QGst/ClockTime>
 #include <QGst/Event>
 #include <QGst/StreamVolume>
+#include <glib-object.h>
+#include <QGst/Sample>
+#include <QGst/Buffer>
+
+#include <glib-object.h>
+#include <gst/gstsample.h>
+#include <gst/gstcaps.h>
+#include <gst/video/video.h>
 Player::Player(QWidget *parent)
     : QGst::Ui::VideoWidget(parent)
 {
-    //this timer is used to tell the ui to change its position slider & label
-    //every 100 ms, but only when the pipeline is playing
-    connect(&m_positionTimer, SIGNAL(timeout()), this, SIGNAL(positionChanged()));
+    m_pipeline      = QGst::Pipeline::create("Video Player + Snapshots pipelin");
+       m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
+       m_videoSink     = QGst::ElementFactory::make("ximagesink", "video-sink");
+
+       if (!m_pipeline || !m_source || !m_videoSink) {
+           QMessageBox::critical(
+                       this,
+                       "Error",
+                       "One or more elements could not be created. Verify that you have all the necessary element plugins installed."
+                       );
+           return;
+       }
+
+       m_videoSink->setProperty("enable-last-sample", true);
+
+       // Add elements to pipeline
+       m_pipeline->add(m_source);
+       m_pipeline->add(m_videoSink);
+
+       // Link elements
+       m_source->link(m_videoSink);
+
+       watchPipeline(m_pipeline);
+       setAutoFillBackground(true);
+
+       // Connect to pipeline's bus
+       QGst::BusPtr bus = m_pipeline->bus();
+       bus->addSignalWatch();
+       QGlib::connect(bus, "message", this, &Player::onBusMessage);
+       bus.clear();
+
+       m_pipeline->setState(QGst::StatePlaying);
 }
 Player::~Player()
 {
@@ -25,43 +62,8 @@ Player::~Player()
         stopPipelineWatch();
     }
 }
-void Player::setUri(const QString & uri)
-{
-    QString realUri = uri;
-    //if uri is not a real uri, assume it is a file path
-    if (realUri.indexOf("://") < 0) {
-        realUri = QUrl::fromLocalFile(realUri).toEncoded();
-    }
-    if (!m_pipeline) {
-        m_pipeline = QGst::ElementFactory::make("playbin").dynamicCast<QGst::Pipeline>();
-        if (m_pipeline) {
-            //let the video widget watch the pipeline for new video sinks
-            watchPipeline(m_pipeline);
-            //watch the bus for messages
-            QGst::BusPtr bus = m_pipeline->bus();
-            bus->addSignalWatch();
-            QGlib::connect(bus, "message", this, &Player::onBusMessage);
-        } else {
-            qCritical() << "Failed to create the pipeline";
-        }
-    }
-    if (m_pipeline) {
-        m_pipeline->setProperty("uri", realUri);
-    }
-}
 
-QTime Player::length() const
-{
-    if (m_pipeline) {
-        //here we query the pipeline about the content's duration
-        //and we request that the result is returned in time format
-        QGst::DurationQueryPtr query = QGst::DurationQuery::create(QGst::FormatTime);
-        m_pipeline->query(query);
-        return QGst::ClockTime(query->duration()).toTime();
-    } else {
-        return QTime(0,0);
-    }
-}
+
 QGst::State Player::state() const
 {
     return m_pipeline ? m_pipeline->currentState() : QGst::StateNull;
@@ -124,4 +126,71 @@ void Player::handlePipelineStateChange(const QGst::StateChangedMessagePtr & scm)
         break;
     }
     Q_EMIT stateChanged();
+}
+void Player::takeSnapshot()
+{
+    QDateTime currentDate = QDateTime::currentDateTime();
+        QString location = QString("%1/snap_%2.png").arg(QDir::homePath()).arg(currentDate.toString(Qt::ISODate));
+        QImage snapShot;
+        QImage::Format snapFormat;
+        QGlib::Value val = m_videoSink->property("last-sample");
+        GstSample *videoSample = (GstSample *)g_value_get_boxed(val);
+        QGst::SamplePtr sample = QGst::SamplePtr::wrap(videoSample);
+        QGst::SamplePtr convertedSample;
+        QGst::BufferPtr buffer;
+        QGst::CapsPtr caps = sample->caps();
+        QGst::MapInfo mapInfo;
+        GError *err = NULL;
+        GstCaps * capsTo = NULL;
+        const QGst::StructurePtr structure = caps->internalStructure(0);
+        int width, height;
+
+        width = structure.data()->value("width").get<int>();
+        height = structure.data()->value("height").get<int>();
+
+        qDebug() << "Sample caps:" << structure.data()->toString();
+
+        /*
+         * { QImage::Format_RGBX8888, GST_VIDEO_FORMAT_RGBx  },
+         * { QImage::Format_RGBA8888, GST_VIDEO_FORMAT_RGBA  },
+         * { QImage::Format_RGB888  , GST_VIDEO_FORMAT_RGB   },
+         * { QImage::Format_RGB16   , GST_VIDEO_FORMAT_RGB16 }
+         */
+        snapFormat = QImage::Format_RGB888;
+        capsTo = gst_caps_new_simple("video/x-raw",
+                                     "format", G_TYPE_STRING, "RGB",
+                                     "width", G_TYPE_INT, width,
+                                     "height", G_TYPE_INT, height,
+                                     NULL);
+
+        convertedSample = QGst::SamplePtr::wrap(gst_video_convert_sample(videoSample, capsTo, GST_SECOND, &err));
+        if (convertedSample.isNull()) {
+            qWarning() << "gst_video_convert_sample Failed:" << err->message;
+        }
+        else {
+            qDebug() << "Converted sample caps:" << convertedSample->caps()->toString();
+
+            buffer = convertedSample->buffer();
+            buffer->map(mapInfo, QGst::MapRead);
+
+            snapShot = QImage((const uchar *)mapInfo.data(),
+                              width,
+                              height,
+                              snapFormat);
+
+            qDebug() << "Saving snap to" << location;
+            snapShot.save(location);
+
+            buffer->unmap(mapInfo);
+        }
+
+        val.clear();
+        sample.clear();
+        convertedSample.clear();
+        buffer.clear();
+        caps.clear();
+        g_clear_error(&err);
+        if (capsTo)
+            gst_caps_unref(capsTo);
+
 }
