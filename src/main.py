@@ -3,7 +3,7 @@ import adafruit_pca9685
 from board import SCL, SDA
 import busio
 import motion
-from motors import *
+from motor import *
 from camera import *
 from network import *
 import rospy
@@ -19,14 +19,15 @@ hat = adafruit_pca9685.PCA9685(i2c_bus)
 hat.frequency = 50
 
 #initialize hardware devices
-leftFrontMotor = Motor(hat, 'LeftFrontMotor', 0, iniFallingValue)
-leftBackMotor = Motor(hat, 'LeftBackMotor', 1, iniFallingValue)
-rightFrontMotor = Motor(hat, 'RightFrontMotor', 2, iniFallingValue)
-rightBackMotor = Motor(hat, 'RightBackMotor', 3, iniFallingValue)
-verticalMotor1 = Motor(hat, 'VerticalMotor1', 4, iniFallingValue)
-verticalMotor2 = Motor(hat, 'VerticalMotor2', 5, iniFallingValue)  
-camera1 = Camera(hat, 'Cam1', 4, iniFallingValue)
-camera2 = Camera(hat, 'Cam2', 5, iniFallingValue)
+frontLeftMotor = Motor(hat, 0, iniFallingValue)
+backlefttMotor = Motor(hat, 1, iniFallingValue)
+frontRightMotor = Motor(hat, 2, iniFallingValue)
+backRightMotor = Motor(hat, 3, iniFallingValue)
+
+verticalMotor1 = Motor(hat, 4, iniFallingValue)
+verticalMotor2 = Motor(hat, 5, iniFallingValue)  
+camera1 = Camera(hat, 6, 7)
+camera2 = Camera(hat, 8, 9)
 
 #Ros initialization
 if __name__ == "__main__":
@@ -62,7 +63,7 @@ def getCoordinates(x, y):
 	#rightFrontMotor.updatePWM(rightFrontPwm)
 	#rightBackMotor.updatePWM(rightBackPwm)
 	# verticalMotor1.updatePWM(verticalPWM)
-	verticalMotor2.updatePWM(verticalPWM)
+	# verticalMotor2.updatePWM(verticalPWM)
 	last_x = x
 	last_y = y
 def cameraMove(data):	
