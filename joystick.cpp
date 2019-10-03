@@ -6,7 +6,10 @@ Joystick::Joystick(QObject *parent):Joystick(0,100,parent){
 Joystick::Joystick(int id, QObject *parent):Joystick(id,100,parent){
 }
 
-Joystick::Joystick(int id, int update_interval, QObject *parent):QObject(parent),id(id){
+Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,Player *m_player1,Player *m_player2):QObject(parent),id(id){
+    this->ros = ros;
+    this->m_player1 = m_player1;
+    this->m_player2 = m_player2;
     SDL_Init(SDL_INIT_JOYSTICK);
     timer = new QTimer();
     event = new SDL_Event();
@@ -18,6 +21,8 @@ Joystick::Joystick(int id, int update_interval, QObject *parent):QObject(parent)
     }
     connect(timer, SIGNAL(timeout()),this,SLOT(update()));
     timer->setInterval(update_interval);
+    timer->start();
+
     axis_values = new double[4]{0,0,0,0};
 }
 
@@ -26,9 +31,10 @@ void Joystick::startListening(){
 }
 
 void Joystick::update(){
+    Axis ax = Axis::x_axis;
+
     while(SDL_PollEvent(event)){
-        if(event->type == SDL_JOYAXISMOTION){
-            Axis ax;
+        /*if(event->type == SDL_JOYAXISMOTION){
             if(event->jaxis.axis == x_Axis_id){
                 ax = Axis::x_axis;
                 axis_values[0] = abs(event->jaxis.value) > DEAD_ZONE ? event->jaxis.value/32768.0 : 0;
@@ -43,16 +49,16 @@ void Joystick::update(){
                 axis_values[3] = abs(event->jaxis.value) > DEAD_ZONE ? event->jaxis.value/32768.0 : 0;
             }
             if(ax == Axis::x_axis || ax == Axis::y_axis){
-                emit axis_Handeler(ax,axis_values[0],axis_values[1]);
+                 axis_Handeler(ax,axis_values[0],axis_values[1]);
             }else{
-                emit axis_Handeler(ax,axis_values[2],axis_values[3]);
+                 axis_Handeler(ax,axis_values[2],axis_values[3]);
             }
-        }else if(event->type == SDL_JOYBUTTONDOWN){
+        }else */if(event->type == SDL_JOYBUTTONDOWN){
             qDebug() << "button event";
-            emit button_handeler(event->jbutton.button,true);
+             button_handeler(event->jbutton.button,true);
         }else if(event->type == SDL_JOYBUTTONUP){
             qDebug() << "button event";
-            emit button_handeler(event->jbutton.button,false);
+             button_handeler(event->jbutton.button,false);
         }else if(event->type == SDL_JOYDEVICEREMOVED){
             qDebug() << "Disconnected";
             SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -72,4 +78,24 @@ void Joystick::update(){
 
 bool Joystick::isConnected(){
     return connected;
+}
+void Joystick::axis_Handeler(Axis ax, double value1, double value2){
+}
+void Joystick::button_handeler(int button, bool value){
+    if(button == shapesBtn)
+    {
+        this->m_player2->takeSnapshot();
+
+    }
+    else if(button == autoBtn)
+    {
+        this->m_player1->takeSnapshot();
+    }
+    else if(button == classifierBtn)
+    {
+        this->m_player2->takeSnapshot();
+    }
+    else if(button == lightBtn)
+    {
+    }
 }

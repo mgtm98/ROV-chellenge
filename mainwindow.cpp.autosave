@@ -162,7 +162,7 @@ void MainWindow::initItems()
     time->setText(timeText);
     this->setCentralWidget(centralWidget);
     this->setGeometry(0,0,QApplication::desktop()->screenGeometry().width(),QApplication::desktop()->screenGeometry().height());
-    this->setStyleSheet("QWidget {  background-color : blue; }");
+    this->setStyleSheet("QWidget {  background-color : white; }");
 
 }
 void MainWindow::sWatchHandler()
@@ -186,12 +186,12 @@ void MainWindow::sWatchHandler()
 
 }
 
-void MainWindow::autoBtnPressed()
+/*void MainWindow::autoBtnPressed()
 {
     m_player1->takeSnapshot();
    /* isAuto = true;
     Topic motors ("Auto", new std_String("T"));
-    this->ros->publish(motors);*/
+    this->ros->publish(motors);
 
 }
 void MainWindow::countCoinsBtnPressed()
@@ -219,3 +219,4 @@ void MainWindow::updateDepth()
 {
 
 }
+*/

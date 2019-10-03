@@ -34,17 +34,17 @@ public:
     ~MainWindow();
 
 private:
-    QPushButton * automationBtn,*coinsBtn,*shapeDetectionBtn,*lightOn,*lightOff,*updateDepthBtn,*camera1OffBtn,*camera1OnBtn,*camera2OffBtn,*camera2OnBtn;
+    QPushButton /**automationBtn,*coinsBtn,*shapeDetectionBtn,*lightOn,*lightOff,*updateDepthBtn,*/*camera1OffBtn,*camera1OnBtn,*camera2OffBtn,*camera2OnBtn;
     QLabel * coinNotxt,*coinNo,*adjustDepth,*camera1,*camera2;
-    QLabel * sensorReadings,*depth,*mode,*temp,*tempValue,*depthValue,*light,*up,*down,*buttonSettings,*time,*sWatch;
-    QLineEdit *editDepth,*fix;
+    QLabel * sensorReadings,*depth,/**mode,*/*temp,*tempValue,*depthValue/*,*light,*up,*down,*/,*buttonSettings,*time,*sWatch;
+   // QLineEdit *editDepth,*fix;
     QWidget *centralWidget;
     QVBoxLayout * verLeftLayout,*verRightLayout;
-    QHBoxLayout * horLayout , *lightBtnslayout, *depthLayout,*cameraLayout1,*cameraLayout2;
-    QGridLayout * btnLayout;
+    QHBoxLayout * horLayout , /**lightBtnslayout, *depthLayout,*/*cameraLayout1,*cameraLayout2;
+    //QGridLayout * btnLayout;
     int seconds=0,minutes=2,coins=0;
     double depthVal=0.0,tempVal=0.0;
-    joystick * my_joy;
+    Joystick * my_joy;
     QTimer *timer;
     QTime *timeVal;
     QString timeText;

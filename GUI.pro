@@ -43,8 +43,8 @@ HEADERS += \
     joystick.h \
     player.h
 
-FORMS += \
-        mainwindow.ui
+#FORMS += \
+ #       mainwindow.ui
 
 LIBS += -L/usr/local/lib -lSDL2
 INCLUDEPATH += /usr/local/include
