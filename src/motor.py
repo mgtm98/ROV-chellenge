@@ -29,6 +29,13 @@ class Motor:
 		self.updatePWM(min_cw)
 		time.sleep(0.5)
 
+# methode used to set the motor speed in equation of motion Jimmy
+	def set_speed(self,speed):
+		if speed < 0:
+			self.anticlockWise(abs(speed))
+		else :
+			self.clockWise(speed)
+
 	def calibrate(self):
 		# to do
 		pass
