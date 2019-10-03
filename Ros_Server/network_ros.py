@@ -26,7 +26,7 @@ def subscribe(data, port):
         update()
 
 def client_dissconnected(port):
-    print(subscribers)
+    print("Main TCU is disconnected")
     for k in subscribers:
         if port in subscribers[k][0]:
             subscribers[k][0].remove(port)
