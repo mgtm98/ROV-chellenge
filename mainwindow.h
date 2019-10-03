@@ -22,9 +22,6 @@
 #include "msg_I.h"
 #include "topic.h"
 #include "player.h"
-namespace Ui {
-class MainWindow;
-}
 
 class MainWindow : public QMainWindow
 {
@@ -37,7 +34,6 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
     QPushButton * automationBtn,*coinsBtn,*shapeDetectionBtn,*lightOn,*lightOff,*updateDepthBtn,*camera1OffBtn,*camera1OnBtn,*camera2OffBtn,*camera2OnBtn;
     QLabel * coinNotxt,*coinNo,*adjustDepth,*camera1,*camera2;
     QLabel * sensorReadings,*depth,*mode,*temp,*tempValue,*depthValue,*light,*up,*down,*buttonSettings,*time,*sWatch;
