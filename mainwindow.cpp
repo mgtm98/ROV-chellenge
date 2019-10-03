@@ -23,7 +23,8 @@ void MainWindow::initItems()
     QFont f1("Arial",25);
     QFont f2("Arial",12);
     QFont f3("Arial",15);
-
+    m_player1 =new Player(this);
+    m_player2 =new Player(this);
     timer = new QTimer();
     centralWidget = new QWidget(this);
     horLayout = new QHBoxLayout();
@@ -126,7 +127,7 @@ void MainWindow::initItems()
     cameraLayout2->addWidget(camera2OnBtn);
     cameraLayout2->addWidget(camera2OffBtn);
     cameraLayout2->setContentsMargins(0,0,300,0);
-    gstream();
+    verLeftLayout->addWidget(m_player1);
     verLeftLayout ->addWidget(buttonSettings);
     verLeftLayout ->addLayout(lightBtnslayout);
     verLeftLayout ->addLayout(cameraLayout1);
@@ -178,35 +179,12 @@ void MainWindow::sWatchHandler()
 
 }
 
-
-void MainWindow::gstream()
-{
-    videoWidget = new QVideoWidget();
-    player = new QMediaPlayer();
-    process = new QProcess;
-    verLeftLayout ->addWidget(videoWidget);
-    QString program = "gst-launch-1.0";
-    QStringList arguments;
-    // QMediaPlayer expects encoded data
-    arguments << "-v" << "videotestsrc" << "!" << "video/x-raw,width=1280,height=720"
-              << "!" << "decodebin" << "!" << "x264enc" << "!" << "filesink" << "location=/dev/stderr";
-
-   // arguments << "-v" << "tcpclientsrc" << "host=192.168.1.1" << "port=9999" << "!" << "gdpdepay" << "!" << "rtpht264depay"
-             // << "!" << "ffdec_h264" << "!" << "ffmpegcolorspace" << "!" << "autovideosink" << "sync=false";
-
-    process->setReadChannel(QProcess::StandardError);
-    process->start(program, arguments);
-    process->waitForReadyRead();
-
-    player->setMedia(QMediaContent(), process);
-    player->play();
-    player->setVideoOutput(videoWidget);
-}
 void MainWindow::autoBtnPressed()
 {
-    isAuto = true;
-    Topic motors ("Salary", new std_String("T"));
-    this->ros->publish(motors);
+    m_player1->takeSnapshot();
+   /* isAuto = true;
+    Topic motors ("Auto", new std_String("T"));
+    this->ros->publish(motors);*/
 
 }
 void MainWindow::countCoinsBtnPressed()

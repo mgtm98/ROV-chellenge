@@ -23,3 +23,12 @@ std::string std_Empty::get_Type(){
 }
 
 
+/*planner a (50,60);
+ros.publish(a)
+
+topicName,"planne",call
+
+call(msg_I m){
+    planner *a = (planner *)m;
+}
+*/

@@ -18,8 +18,6 @@ private:
     QTimer * timer;
     SDL_Event  e;
     bool quit = false;
-    int xDir = 0;
-    int yDir = 0;
     int xVal = 0;
     int yVal = 0;
 public:
