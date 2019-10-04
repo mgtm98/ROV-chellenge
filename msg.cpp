@@ -23,6 +23,7 @@ std::string std_Empty::get_Type(){
 }
 // **************************************************************************
 pln_motion::pln_motion(double x, double y):x_speed(x),y_speed(y){
+
 }
 
 std::string pln_motion::encode(){
@@ -34,6 +35,7 @@ std::string pln_motion::get_Type(){
 }
 // **************************************************************************
 z_motion::z_motion(double z):z_speed(z){
+
 }
 
 std::string z_motion::encode(){
@@ -65,3 +67,17 @@ call(msg_I m){
     planner *a = (planner *)m;
 }
 */
+
+// **************************************************************************
+camera_msg::camera_msg(int ind, std::string act, int x_angle, int y_angle):index(ind),action(act),x(x_angle),y(y_angle){
+}
+
+std::string camera_msg::encode(){
+    return "{\"index\" : "+std::to_string(index) + ", \"action\" : \""+action + "\", \"x\" : "
+            + std::to_string(x) + ", \"y\" : "+std::to_string(y) + "}";
+}
+
+std::string camera_msg::get_Type(){
+    return "rov20/camera";
+}
+// **************************************************************************

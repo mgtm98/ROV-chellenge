@@ -28,20 +28,23 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    topic.cpp \
-    ros.cpp \
-    joystick.cpp \
-    player.cpp \
-    msg.cpp
+        topic.cpp \
+        ros.cpp \
+        msg.cpp \
+        joystick.cpp \
+        player.cpp \
+        srv_.cpp \
+        service.cpp
 
 HEADERS += \
         mainwindow.h \
-    topic.h \
-    ros.h \
-    joystick.h \
-    player.h \
-    msg.h
-
+        topic.h \
+        ros.h \
+        msg.h \
+        joystick.h \
+        player.h \
+        srv_.h \
+        service.h
 #FORMS += \
  #       mainwindow.ui
 

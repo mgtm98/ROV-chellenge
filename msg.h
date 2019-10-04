@@ -35,20 +35,24 @@ public:
 class pln_motion: public msg_I{
 //    type : rov20/pln_motion
 public:
+
     pln_motion(double,double);
     std::string encode() ;
     std::string get_Type();
     double x_speed;
     double y_speed;
+
 };
 
 class z_motion: public msg_I{
 //    type : rov20/z_motion
 public:
+
     z_motion(double);
     std::string encode() ;
     std::string get_Type();
     double z_speed;
+
 
 };
 
@@ -61,6 +65,19 @@ public:
     int x_speed;
     int y_speed;
     int z_speed;
+};
+
+
+class camera_msg: public msg_I{
+//    type : rov20/row_data
+public:
+    camera_msg(int,std::string,int,int);
+    std::string encode() ;
+    std::string get_Type();
+    int index;
+    int x;
+    int y;
+    std::string action;
 };
 
 
