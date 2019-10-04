@@ -1,7 +1,7 @@
 #ifndef TOPIC_H
 #define TOPIC_H
 
-#include "msgs.h"
+#include "msg.h"
 #include <string.h>
 
 class Topic{

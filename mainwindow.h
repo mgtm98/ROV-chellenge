@@ -18,7 +18,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include "ros.h"
-#include "msgs.h"
+#include "msg.h"
 #include "topic.h"
 #include "player.h"
 

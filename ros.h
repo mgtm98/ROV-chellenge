@@ -10,7 +10,7 @@
 #include <QTextCodec>
 #include <rapidjson/document.h>
 #include "topic.h"
-#include "msgs.h"
+#include "msg.h"
 #include "service.h"
 #include "srv_.h"
 
