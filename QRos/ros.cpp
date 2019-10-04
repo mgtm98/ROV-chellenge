@@ -74,13 +74,20 @@ msg_I *QRos::creatMsg(rapidjson::Value::Object msgObject){
     }else if(msgObject["type"] == "std_msgs/Empty"){
         std_Empty *s = new std_Empty();
         return s;
+    }else if(msgObject["type"] == "rov20/camera"){
+        int index = msgObject["data"].GetObject()["index"].GetInt();
+        std::string action = msgObject["data"].GetObject()["action"].GetString();
+        int x = msgObject["data"].GetObject()["x"].GetInt();
+        int y = msgObject["data"].GetObject()["y"].GetInt();
+        camera_msg *s = new camera_msg(index.action,x,y);
+        return s;
     }
 }
 
 srv_resp_I *QRos::creatResp(rapidjson::Value::Object msgObject){
-    if(msgObject["srv-name"] == "test"){
-        std::string output = msgObject["response"].GetObject()["output"].GetString();
-        srv_resp_I *t = new test_srv_resp(output);
-        return t;
-    }
+    // if(msgObject["srv-name"] == "test"){
+    //     std::string output = msgObject["response"].GetObject()["output"].GetString();
+    //     srv_resp_I *t = new test_srv_resp(output);
+    //     return t;
+    // }
 }

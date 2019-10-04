@@ -63,10 +63,10 @@ public:
     int z_speed;
 };
 
-class camera: public msg_I{
+class camera_msg: public msg_I{
 //    type : rov20/row_data
 public:
-    camera(int,std::string,int,int);
+    camera_msg(int,std::string,int,int);
     std::string encode() ;
     std::string get_Type();
     int index;
