@@ -61,6 +61,12 @@ def Testsrv_Handeler(func,srvData):
         "output" : output
         }
 
+def Testsrv_Handeler(func,srvData):
+    output = func(srvData["data"]["command"]).response
+    return {
+        "output" : output
+    }
+
 subscribe_handlers_table = {
     "Salary" : Salary_Handeler,
     "Time" : Time_Handeler,
