@@ -19,7 +19,6 @@
 #include <QLineEdit>
 #include "ros.h"
 #include "msgs.h"
-#include "msg_I.h"
 #include "topic.h"
 #include "player.h"
 
