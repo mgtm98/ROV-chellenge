@@ -30,4 +30,20 @@ public:
     std::string req;
 };
 
+class lights_srv_resp :public srv_resp_I{
+public:
+    lights_srv_resp(std::string);
+    std::string response;
+};
+
+class lights_srv : public srv_I{
+//        type : srv/lights
+//        data : req :command (var name in json file)
+//               res :response (var name in json file)
+public:
+    lights_srv(std::string command);
+    std::string encode();
+    std::string command;
+};
+
 #endif // SRV_RSP_H
