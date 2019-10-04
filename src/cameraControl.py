@@ -1,4 +1,4 @@
-from rov20.msg import camera_msg
+from rov20.msg import camera_info
 import rospy
 from camera import Camera
 from board import SCL, SDA
@@ -20,7 +20,7 @@ def control(data):
 
 if __name__ == "__main__":
     rospy.init_node("camera")
-    rospy.Subscriber("cameraControl", camera_msg, control)
+    rospy.Subscriber("cameraControl", camera_info, control)
     i2c_bus = busio.I2C(SCL, SDA)
     hat = PCA9685(i2c_bus)
     hat.frequency = 50
