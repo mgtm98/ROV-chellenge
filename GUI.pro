@@ -38,7 +38,6 @@ HEADERS += \
         mainwindow.h \
     topic.h \
     ros.h \
-    msg_I.h \
     msgs.h \
     joystick.h \
     player.h

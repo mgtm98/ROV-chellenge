@@ -10,7 +10,6 @@
 #include <QTextCodec>
 #include <rapidjson/document.h>
 #include "topic.h"
-#include "msg_I.h"
 #include "msgs.h"
 
 class QRos : public QObject {
