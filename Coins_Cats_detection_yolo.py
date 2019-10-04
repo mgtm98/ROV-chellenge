@@ -1,3 +1,5 @@
+######################## YOU NEED TO DOWMOAD THIS FOLDER TO RUN THE CODE#########################
+########## https://drive.google.com/drive/folders/1_YDEiO2TeW0T6JWmrrr2kxtDQ28TtFoB?usp=sharing
 import numpy as np
 import argparse
 import time
@@ -38,29 +40,23 @@ image = cv2.imread(args["image"])
 
 #####################################COINS#################################
 
-blurred_image = cv2.GaussianBlur(image,(15,15),cv2.BORDER_DEFAULT)
-coins_gray = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
+gray =  cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+_,thresh=cv2.threshold(gray,230,255,0)
 
-output = image.copy()
-cv2.imshow("output1", coins_gray)
-cv2.waitKey(0)
+contours, _ = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+coins=0
+for c in contours:
+    # to eliminate noise
+    if cv2.contourArea(c) < 1000:
+        continue
+    # Approximates a polygonal curve(s) with the specified precision.
+    polygon = cv2.approxPolyDP(c, 0.01*cv2.arcLength(c,True),True)
+    cv2.drawContours(image,[polygon],0,(0),5)
 
-coins = cv2.HoughCircles(coins_gray, cv2.HOUGH_GRADIENT, 1.2, 50)
-if coins is not None:
-    # convert the (x, y) coordinates and radius of the circles to integers
-    coins = np.round(coins[0, :]).astype("int")
-    print("number of coins:",len(coins))
+    if(len(polygon)>10):
+        coins+=1
 
-    # loop over the (x, y) coordinates and radius of the circles
-    for (x, y, r) in coins:
-        # draw the circle in the output image, then draw a rectangle
-        # corresponding to the center of the circle
-        cv2.circle(output, (x, y), r, (0, 255, 0), 4)
-        cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
-
-    # show the output image
-    cv2.imshow("output", np.hstack([image, output]))
-    cv2.waitKey(0)
+print("number of coins:",coins)
 
 
 #####################################CATS##############################
@@ -154,4 +150,3 @@ print("cats: ", cats)
 # show the output image
 # cv2.imshow("Image", image)
 # cv2.waitKey(0)
-
