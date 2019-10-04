@@ -40,6 +40,7 @@ private:
     QTimer          *timer;
     int              id;
     bool             connected;
+    bool             lightFlag = false;
     double           *axis_values;
     int              shapesBtn = 0;
     int              autoBtn = 1;

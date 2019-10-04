@@ -106,6 +106,17 @@ void Joystick::button_handeler(int button, bool value){
         this->m_player2->takeSnapshot();
     }
     else if(button == lightBtn)
-    {
+    {   if(lightFlag)
+        {
+            Topic t ("control", new std_String("off"));
+            this->ros->publish(t);
+        }
+        else
+        {
+            Topic t ("control", new std_String("on"));
+            this->ros->publish(t);
+        }
+        lightFlag = !lightFlag;
+
     }
 }

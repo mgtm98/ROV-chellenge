@@ -56,9 +56,10 @@ private slots:
     //void toggleLightOn();
     //void toggleLightOff();
     //void updateDepth();
-    void cameraOnPressed(int player);
-    void cameraOffPressed(int player);
-
+    void camera1OnPressed();
+    void camera1OffPressed();
+    void camera2OnPressed();
+    void camera2OffPressed();
 
 };
 
