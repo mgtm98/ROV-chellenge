@@ -55,4 +55,9 @@ std::string raw_data::get_Type(){
     return "rov20/raw_data";
 }
 // **************************************************************************
+camera::camera(int ind, std::string act, int x_angle, int y_angle):index(ind),action(act),x(x_angle),y(y_angle){
+}
 
+std::string camera::encode(){
+    
+}
