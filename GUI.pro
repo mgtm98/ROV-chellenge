@@ -30,18 +30,17 @@ SOURCES += \
         mainwindow.cpp \
     topic.cpp \
     ros.cpp \
-    msgs.cpp \
     joystick.cpp \
-    player.cpp
+    player.cpp \
+    msg.cpp
 
 HEADERS += \
         mainwindow.h \
     topic.h \
     ros.h \
-    msg_I.h \
-    msgs.h \
     joystick.h \
-    player.h
+    player.h \
+    msg.h
 
 #FORMS += \
  #       mainwindow.ui

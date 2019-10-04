@@ -12,16 +12,13 @@
 #include "joystick.h"
 #include <QTimer>
 #include <QTime>
-#include <QMediaPlayer>
-#include <QVideoWidget>
-#include <QProcess>
 #include <QGridLayout>
 #include <QLineEdit>
 #include "ros.h"
-#include "msgs.h"
-#include "msg_I.h"
-#include "topic.h"
 #include "player.h"
+#include "msg.h"
+#include "topic.h"
+
 
 class MainWindow : public QMainWindow
 {
@@ -48,20 +45,20 @@ private:
     QTimer *timer;
     QTime *timeVal;
     QString timeText;
-    QVideoWidget *videoWidget;
-    QMediaPlayer *player ;
-    QProcess *process ;
     bool isAuto = false,istrap = false, isMetal = false;
     QRos *ros;
-    Player *m_player1, *m_player2;
+    Player *m_player1;//, *m_player2;
 private slots:
     void sWatchHandler();
-    void autoBtnPressed();
-    void countCoinsBtnPressed();
-    void shapeDetectionBtnPressed();
-    void toggleLightOn();
-    void toggleLightOff();
-    void updateDepth();
+    //void autoBtnPressed();
+    //void countCoinsBtnPressed();
+    //void shapeDetectionBtnPressed();
+    //void toggleLightOn();
+    //void toggleLightOff();
+    //void updateDepth();
+    void cameraOnPressed(int player);
+    void cameraOffPressed(int player);
+
 
 };
 

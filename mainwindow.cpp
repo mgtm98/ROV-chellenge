@@ -3,6 +3,8 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     QMainWindow(parent)
 {
     this->ros = ros;
+    m_player1 =new Player(nullptr,"udpsrc port=1234 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
+
     initItems();
     //my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2);
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
@@ -11,6 +13,11 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     //connect(lightOn,SIGNAL(clicked()),this,SLOT(toggleLightOn()));
     //connect(lightOff,SIGNAL(clicked()),this,SLOT(toggleLightOff()));
     //connect(updateDepthBtn,SIGNAL(clicked()),this,SLOT(updateDepth()));
+    connect(camera1OnBtn,SIGNAL(clicked()),this,SLOT(cameraOnPressed(1)));
+    connect(camera2OnBtn,SIGNAL(clicked()),this,SLOT(cameraOnPressed(2)));
+    connect(camera1OffBtn,SIGNAL(clicked()),this,SLOT(cameraOnPressed(1)));
+    connect(camera2OffBtn,SIGNAL(clicked()),this,SLOT(cameraOnPressed(2)));
+
     connect(timer,SIGNAL(timeout()),this,SLOT(sWatchHandler()));
     timer->start(1000);
 }
@@ -23,10 +30,9 @@ void MainWindow::initItems()
     QFont f1("Arial",25);
     QFont f2("Arial",12);
     QFont f3("Arial",15);
-    m_player1 =new Player(this);
-    m_player2 =new Player(this);
+   // m_player2 =new Player(this,"");
     m_player1->setFixedHeight(500);
-    m_player2->setFixedHeight(500);
+    //m_player2->setFixedHeight(500);
 
     timer = new QTimer();
     centralWidget = new QWidget(this);
@@ -142,7 +148,7 @@ void MainWindow::initItems()
     /*verLeftLayout ->addLayout(depthLayout);
     verLeftLayout ->addWidget(up);
     verLeftLayout ->addWidget(down);*/
-    verRightLayout->addWidget(m_player2);
+    //verRightLayout->addWidget(m_player2);
     verRightLayout ->addLayout(cameraLayout2);
 
     verRightLayout->addWidget(sensorReadings);
@@ -153,7 +159,7 @@ void MainWindow::initItems()
     //verRightLayout->addWidget(mode);
     //verRightLayout->addLayout(btnLayout);
     //verRightLayout->addWidget(fix);
-    verRightLayout->addWidget(buttonSettings);
+    //verRightLayout->addWidget(buttonSettings);
     horLayout->addLayout(verLeftLayout);
     horLayout->addLayout(verRightLayout);
     centralWidget->setLayout(horLayout);
@@ -162,7 +168,7 @@ void MainWindow::initItems()
     time->setText(timeText);
     this->setCentralWidget(centralWidget);
     this->setGeometry(0,0,QApplication::desktop()->screenGeometry().width(),QApplication::desktop()->screenGeometry().height());
-    this->setStyleSheet("QWidget {  background-color : blue; }");
+    this->setStyleSheet("QWidget {  background-color : white; }");
 
 }
 void MainWindow::sWatchHandler()
@@ -183,15 +189,39 @@ void MainWindow::sWatchHandler()
     {
         time->setText("Time is Up");
     }
-
 }
+void MainWindow::cameraOnPressed(int player)
+{
+    if(player == 1)
+    {
+        this->m_player1->play();
 
-void MainWindow::autoBtnPressed()
+    }
+    else
+    {
+        //this->m_player2->play();
+
+    }
+}
+void MainWindow::cameraOffPressed(int player)
+{
+    if(player == 1)
+    {
+        this->m_player1->pause();
+
+    }
+    else
+    {
+       // this->m_player2->pause();
+
+    }
+}
+/*void MainWindow::autoBtnPressed()
 {
     m_player1->takeSnapshot();
-   /* isAuto = true;
+    isAuto = true;
     Topic motors ("Auto", new std_String("T"));
-    this->ros->publish(motors);*/
+    this->ros->publish(motors);
 
 }
 void MainWindow::countCoinsBtnPressed()
@@ -219,3 +249,4 @@ void MainWindow::updateDepth()
 {
 
 }
+*/

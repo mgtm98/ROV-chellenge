@@ -19,13 +19,15 @@
 #include <gst/gstsample.h>
 #include <gst/gstcaps.h>
 #include <gst/video/video.h>
-Player::Player(QWidget *parent)
+Player::Player(QWidget *parent, QString configure)
     : QGst::Ui::VideoWidget(parent)
 {
-    m_pipeline      = QGst::Pipeline::create("Video Player + Snapshots pipelin");
-       m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
-       m_videoSink     = QGst::ElementFactory::make("ximagesink", "video-sink");
-
+       this->configure = configure;
+       m_pipeline      = QGst::Pipeline::create();
+       //m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
+      m_videoSink     = QGst::ElementFactory::make("autovideosink");
+       m_source = QGst::Bin::fromDescription(this->configure);
+        // m_videoSink = QGst::Bin::fromDescription(this->configure);
        if (!m_pipeline || !m_source || !m_videoSink) {
            QMessageBox::critical(
                        this,
@@ -34,7 +36,6 @@ Player::Player(QWidget *parent)
                        );
            return;
        }
-
        m_videoSink->setProperty("enable-last-sample", true);
 
        // Add elements to pipeline

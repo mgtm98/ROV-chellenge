@@ -34,7 +34,7 @@ void Joystick::update(){
     Axis ax = Axis::x_axis;
 
     while(SDL_PollEvent(event)){
-        /*if(event->type == SDL_JOYAXISMOTION){
+        if(event->type == SDL_JOYAXISMOTION){
             if(event->jaxis.axis == x_Axis_id){
                 ax = Axis::x_axis;
                 axis_values[0] = abs(event->jaxis.value) > DEAD_ZONE ? event->jaxis.value/32768.0 : 0;
@@ -53,7 +53,7 @@ void Joystick::update(){
             }else{
                  axis_Handeler(ax,axis_values[2],axis_values[3]);
             }
-        }else */if(event->type == SDL_JOYBUTTONDOWN){
+        }else if(event->type == SDL_JOYBUTTONDOWN){
             qDebug() << "button event";
              button_handeler(event->jbutton.button,true);
         }else if(event->type == SDL_JOYBUTTONUP){
@@ -80,6 +80,16 @@ bool Joystick::isConnected(){
     return connected;
 }
 void Joystick::axis_Handeler(Axis ax, double value1, double value2){
+       if(ax == Axis::x_axis || ax == Axis::y_axis)
+       {
+           Topic t ("control", new pln_motion(value1,value2));
+           this->ros->publish(t);
+       }
+       else if (ax == Axis::z_axis)
+       {
+           Topic t ("altitude", new z_motion(value1));
+           this->ros->publish(t);
+       }
 }
 void Joystick::button_handeler(int button, bool value){
     if(button == shapesBtn)

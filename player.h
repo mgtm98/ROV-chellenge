@@ -9,7 +9,7 @@ class Player : public QGst::Ui::VideoWidget
 {
     Q_OBJECT
 public:
-    Player(QWidget *parent = 0);
+    Player(QWidget *parent = 0, QString configure = "");
     ~Player();
     void setUri(const QString & uri);
     QTime length() const;
@@ -28,5 +28,6 @@ private:
     QTimer m_positionTimer;
     QGst::ElementPtr m_source;
     QGst::ElementPtr m_videoSink;
+    QString configure;
 };
 #endif
