@@ -30,9 +30,9 @@ void MainWindow::initItems()
     QFont f1("Arial",25);
     QFont f2("Arial",12);
     QFont f3("Arial",15);
-   // m_player2 =new Player(this,"");
+    m_player2 =new Player(this,"");
     m_player1->setFixedHeight(500);
-    //m_player2->setFixedHeight(500);
+    m_player2->setFixedHeight(500);
 
     timer = new QTimer();
     centralWidget = new QWidget(this);
@@ -148,7 +148,7 @@ void MainWindow::initItems()
     /*verLeftLayout ->addLayout(depthLayout);
     verLeftLayout ->addWidget(up);
     verLeftLayout ->addWidget(down);*/
-    //verRightLayout->addWidget(m_player2);
+    verRightLayout->addWidget(m_player2);
     verRightLayout ->addLayout(cameraLayout2);
 
     verRightLayout->addWidget(sensorReadings);
@@ -199,7 +199,7 @@ void MainWindow::cameraOnPressed(int player)
     }
     else
     {
-        //this->m_player2->play();
+        this->m_player2->play();
 
     }
 }
@@ -212,7 +212,7 @@ void MainWindow::cameraOffPressed(int player)
     }
     else
     {
-       // this->m_player2->pause();
+        this->m_player2->pause();
 
     }
 }

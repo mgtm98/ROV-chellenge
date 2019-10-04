@@ -47,7 +47,7 @@ private:
     QString timeText;
     bool isAuto = false,istrap = false, isMetal = false;
     QRos *ros;
-    Player *m_player1;//, *m_player2;
+    Player *m_player1, *m_player2;
 private slots:
     void sWatchHandler();
     //void autoBtnPressed();

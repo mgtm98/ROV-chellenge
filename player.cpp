@@ -24,9 +24,9 @@ Player::Player(QWidget *parent, QString configure)
 {
        this->configure = configure;
        m_pipeline      = QGst::Pipeline::create();
-       //m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
+       m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
       m_videoSink     = QGst::ElementFactory::make("autovideosink");
-       m_source = QGst::Bin::fromDescription(this->configure);
+       //m_source = QGst::Bin::fromDescription(this->configure);
         // m_videoSink = QGst::Bin::fromDescription(this->configure);
        if (!m_pipeline || !m_source || !m_videoSink) {
            QMessageBox::critical(
