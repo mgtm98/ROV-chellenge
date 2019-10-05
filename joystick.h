@@ -41,6 +41,7 @@ private:
     int              id;
     bool             connected;
     bool             lightFlag = false;
+    bool             camFlag = false;
     double           *axis_values;
     int              shapesBtn = 0;
     int              autoBtn = 1;
@@ -48,7 +49,7 @@ private:
     int              lightBtn = 3;
     int              openBoxBtn = 4;
     int              openlockBtn = 5;
-    int              cam1Btn = 6;
+    int              camBtn = 6;
     int              cam2Btn = 7;
     QRos             *ros;
     Player *m_player1, *m_player2;

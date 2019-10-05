@@ -80,16 +80,27 @@ bool Joystick::isConnected(){
     return connected;
 }
 void Joystick::axis_Handeler(Axis ax, double value1, double value2){
-       if(ax == Axis::x_axis || ax == Axis::y_axis)
+       if((ax == Axis::x_axis || ax == Axis::y_axis) && !camFlag)
        {
            Topic t ("control", new pln_motion(value1,value2));
            this->ros->publish(t);
        }
-       else if (ax == Axis::z_axis)
+       else if (ax == Axis::z_axis && !camFlag)
        {
            Topic t ("altitude", new z_motion(value1));
            this->ros->publish(t);
        }
+       else if((ax == Axis::x_axis || ax == Axis::y_axis) && camFlag)
+       {
+           Topic t ("camera", new camera_msg(0,"move",(int)value1,(int)value2));
+           this->ros->publish(t);
+       }
+       else if ((ax == Axis::z_axis || ax == Axis::r_axis) && camFlag)
+       {
+           Topic t ("camera", new camera_msg(1,"move",(int)value1,(int)value2));
+           this->ros->publish(t);
+       }
+
 }
 void Joystick::button_handeler(int button, bool value){
     if(button == shapesBtn)
@@ -99,7 +110,6 @@ void Joystick::button_handeler(int button, bool value){
     }
     else if(button == autoBtn)
     {
-        this->m_player1->takeSnapshot();
     }
     else if(button == classifierBtn)
     {
@@ -108,15 +118,24 @@ void Joystick::button_handeler(int button, bool value){
     else if(button == lightBtn)
     {   if(lightFlag)
         {
-            Topic t ("control", new std_String("off"));
+            Topic t ("lights", new std_String("off"));
             this->ros->publish(t);
         }
         else
         {
-            Topic t ("control", new std_String("on"));
+            Topic t ("lights", new std_String("on"));
             this->ros->publish(t);
         }
         lightFlag = !lightFlag;
 
     }
+    else if(button == camBtn && value)
+    {
+        camFlag = true;
+    }
+    else if(button == camBtn && !value)
+    {
+        camFlag = false;
+    }
+
 }
