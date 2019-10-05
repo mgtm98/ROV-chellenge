@@ -18,7 +18,7 @@
 #include "player.h"
 #include "msg.h"
 #include "topic.h"
-
+#include <QProcess>
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +28,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr,QRos *ros = nullptr);
     void initItems();
     void gstream();
+    QString runProcess(QStringList params);
     ~MainWindow();
 
 private:

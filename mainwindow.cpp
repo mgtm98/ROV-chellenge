@@ -30,7 +30,7 @@ void MainWindow::initItems()
     QFont f1("Arial",25);
     QFont f2("Arial",12);
     QFont f3("Arial",15);
-    m_player2 =new Player(nullptr,"udpsrc port=1234 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
+    m_player2 =new Player(nullptr,"udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
     m_player1->setFixedHeight(500);
     m_player2->setFixedHeight(500);
 
@@ -194,8 +194,13 @@ void MainWindow::sWatchHandler()
 void MainWindow::camera1OnPressed()
 {
 
-        this->m_player1->play();
+        //this->m_player1->play();
+       QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
 
+
+       QString out = runProcess(params);
+       qDebug() << params;
+       qDebug() << out;
 
 }
 void MainWindow::camera1OffPressed()
@@ -219,6 +224,17 @@ void MainWindow::camera2OffPressed()
 
 
 
+}
+QString MainWindow::runProcess(QStringList params)
+{
+    QProcess process;
+    process.start("python", params);
+    process.waitForFinished();
+    QString error = process.readAllStandardError();
+    if (error != "")
+        qDebug() << error;
+   qDebug() << QString (process.readAll());;
+    return process.readAllStandardOutput();
 }
 /*void MainWindow::autoBtnPressed()
 {
