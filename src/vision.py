@@ -11,12 +11,14 @@ def control(data):
     global camera
     if data.action == "move":
         camera[data.index].move(data.x, data.y)
-    elif data.action == "stream":
-        camera[data.index].stream()
+    elif data.action == "start":
+        camera[data.index].start_stream()
     elif data.action == "play":
-        camera[data.index].play_stream()
+        camera[data.index].play()
+    elif data.action == "pause":
+        camera[data.index].pause()
     else:
-        camera[data.index].stop_stream()
+        camera[data.index].stop()
     return
 
 def lights_handeler(data):

@@ -25,7 +25,7 @@ class Camera:
 		self.servo_x.angle = angle_x
 		self.servo_y.angle = angle_y
 
-	def stream(self):
+	def start_stream(self):
 		Gst.init(None)
 		self.pipeline = Gst.Pipeline()
 		
@@ -63,10 +63,13 @@ class Camera:
 		loop = GObject.MainLoop()
 		loop.run()
 
-	def play_stream(self):
+	def play(self):
 		self.pipeline.set_state(Gst.State.PLAYING)
+
+	def pause(self):
+		self.pipeline.set_state(Gst.State.PAUSED)
 	
-	def stop_stream(self):
+	def stop(self):
 		self.pipeline.set_state(Gst.State.NULL)
 
 	def on_message(self, bus, message):
