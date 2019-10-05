@@ -28,6 +28,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr,QRos *ros = nullptr);
     void initItems();
     void gstream();
+    static void setSensorReadings(msg_I *t);
     QString runProcess(QStringList params);
     ~MainWindow();
 

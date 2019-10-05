@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
 
     initItems();
     //my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2);
+    this->ros->subscrib("sensors","raw_data",setSensorReadings);
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
     //connect(coinsBtn,SIGNAL(clicked()),this,SLOT(countCoinsBtnPressed()));
     //connect(shapeDetectionBtn,SIGNAL(clicked()),this,SLOT(shapeDetectionBtnPressed()));
@@ -30,7 +31,7 @@ void MainWindow::initItems()
     QFont f1("Arial",25);
     QFont f2("Arial",12);
     QFont f3("Arial",15);
-    m_player2 =new Player(nullptr,"udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
+    m_player2 =new Player(nullptr,"udpsrc port=8001 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
     m_player1->setFixedHeight(500);
     m_player2->setFixedHeight(500);
 
@@ -78,6 +79,23 @@ void MainWindow::initItems()
 
     camera1->setFont(f2);
     camera2->setFont(f2);
+
+    trap = new QLabel("Trap");
+    trap->setStyleSheet("QLabel {  color : blue; }");
+
+    trap->setFont(f2);
+    trapVal = new QLabel("NO");
+    trapVal->setStyleSheet("QLabel {  color : green; }");
+
+    trapVal->setFont(f2);
+    metal = new QLabel("Metal");
+    metal->setStyleSheet("QLabel {  color : blue; }");
+
+    metal->setFont(f2);
+    metalVal = new QLabel("NO");
+    metalVal->setStyleSheet("QLabel {  color : red; }");
+
+    metalVal->setFont(f2);
    /* adjustDepth = new QLabel("Update depth");
     adjustDepth->setFont(f2);
     adjustDepth->setStyleSheet("QLabel {  color : blue; }");
@@ -145,6 +163,11 @@ void MainWindow::initItems()
    // verLeftLayout ->addLayout(lightBtnslayout);
     verLeftLayout ->addWidget(coinNotxt);
     verLeftLayout->addWidget(coinNo,0,Qt::AlignCenter);
+    verLeftLayout->addWidget(trap);
+    verLeftLayout->addWidget(trapVal,0,Qt::AlignCenter);
+    verLeftLayout->addWidget(metal);
+    verLeftLayout->addWidget(metalVal,0,Qt::AlignCenter);
+
     /*verLeftLayout ->addLayout(depthLayout);
     verLeftLayout ->addWidget(up);
     verLeftLayout ->addWidget(down);*/
@@ -235,6 +258,10 @@ QString MainWindow::runProcess(QStringList params)
         qDebug() << error;
    qDebug() << QString (process.readAll());;
     return process.readAllStandardOutput();
+}
+void MainWindow::setSensorReadings(msg_I *t){
+    raw_data *a = (raw_data *)t;
+    depthVal = a->x_speed;
 }
 /*void MainWindow::autoBtnPressed()
 {
