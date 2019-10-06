@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
 
     initItems();
     //my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2);
-    this->ros->subscrib("sensors","raw_data",setSensorReadings);
+//    this->ros->subscrib("sensors","raw_data",setSensorReadings);
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
     //connect(coinsBtn,SIGNAL(clicked()),this,SLOT(countCoinsBtnPressed()));
     //connect(shapeDetectionBtn,SIGNAL(clicked()),this,SLOT(shapeDetectionBtnPressed()));
@@ -222,7 +222,7 @@ void MainWindow::camera1OnPressed()
 
 
        QString out = runProcess(params);
-       qDebug() << params;
+     //  qDebug() << params;
        qDebug() << out;
 
 }
@@ -237,32 +237,26 @@ void MainWindow::camera2OnPressed()
 
         this->m_player2->play();
 
-
 }
 void MainWindow::camera2OffPressed()
 {
 
         this->m_player2->pause();
 
-
-
-
 }
 QString MainWindow::runProcess(QStringList params)
 {
-    QProcess process;
-    process.start("python", params);
-    process.waitForFinished();
-    QString error = process.readAllStandardError();
-    if (error != "")
-        qDebug() << error;
-   qDebug() << QString (process.readAll());;
-    return process.readAllStandardOutput();
+    QString path = QCoreApplication::applicationDirPath();
+    QProcess *process = new QProcess();
+    process->startDetached("python", params,path);
+    process->waitForFinished(-1);
+   //qDebug() << QString (process->readAll());
+    return process->readAll();
 }
-void MainWindow::setSensorReadings(msg_I *t){
+/*void MainWindow::setSensorReadings(msg_I *t){
     raw_data *a = (raw_data *)t;
     depthVal = a->x_speed;
-}
+}*/
 /*void MainWindow::autoBtnPressed()
 {
     m_player1->takeSnapshot();
