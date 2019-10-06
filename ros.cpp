@@ -25,13 +25,13 @@ void QRos::publish(Topic &t){
 }
 
 
-void QRos::subscrib(std::string topic_name, std::string msg_type, void (*handler)(msg_I*)){
+void QRos::subscrib(std::string topic_name, std::string msg_type, std::function<void(msg_I*)> handler){
     std::string request = "{\"type\" : \"topic_subscribe\", \"topic_name\" : \""+topic_name+"\", \"msg-type\" : \""+msg_type+"\"}";
     subscriber_table[topic_name]=handler;
     send(request);
 }
 
-void QRos::send_request(Service *srv, void (*handler)(srv_resp_I*)){
+void QRos::send_request(Service *srv, std::function<void(srv_resp_I*)> handler){
     std::string encodedData = "{\"type\" : \"service_request\", ";
     encodedData += "\"srv_name\" : \"" + srv->get_name()+"\",";
     encodedData += "\"data\" : " + srv->get_srv()->encode()+" }";
@@ -46,11 +46,10 @@ void QRos::handel_response(){
     rapidjson::Document json;
     json.Parse(data_str.toStdString().c_str());
     if(json["type"] == "topic_response"){
-//        qDebug().noquote() << "here";
         rapidjson::Value::Object msgObject = json["msg"].GetObject();
         msg_I *msg = creatMsg(msgObject);
         std::string topicName = json["topic_name"].GetString();
-        (*subscriber_table[topicName])(msg);
+        subscriber_table[topicName](msg);
     }else if(json["type"] == "srv-response"){
         rapidjson::Value::Object msgObject = json["response"].GetObject();
         srv_resp_I *rsp = creatResp(json.GetObject());

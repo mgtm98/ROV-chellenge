@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
 
     initItems();
     //my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2);
-    this->ros->subscrib("sensors","raw_data",setSensorReadings);
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
     //connect(coinsBtn,SIGNAL(clicked()),this,SLOT(countCoinsBtnPressed()));
     //connect(shapeDetectionBtn,SIGNAL(clicked()),this,SLOT(shapeDetectionBtnPressed()));
@@ -20,6 +19,12 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     connect(camera2OffBtn,SIGNAL(clicked()),this,SLOT(camera2OnPressed()));
 
     connect(timer,SIGNAL(timeout()),this,SLOT(sWatchHandler()));
+    double &d = this->depthVal;
+    this->ros->subscrib("sensors","raw_data",[&d](msg_I *m){
+        raw_data *a = (raw_data *)m;
+        d = a->x_speed;
+    });
+
     timer->start(1000);
 }
 
