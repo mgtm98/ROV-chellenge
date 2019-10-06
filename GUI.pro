@@ -34,7 +34,8 @@ SOURCES += \
         joystick.cpp \
         player.cpp \
         srv_.cpp \
-        service.cpp
+        service.cpp \
+    buttonsettings.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
         joystick.h \
         player.h \
         srv_.h \
-        service.h
+        service.h \
+    buttonsettings.h
 #FORMS += \
  #       mainwindow.ui
 
@@ -62,3 +64,6 @@ PKGCONFIG +=   Qt5GStreamer-1.0 Qt5GStreamerUi-1.0  gstreamer-1.0 gstreamer-vide
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS += \
+    buttonsettings.ui

@@ -25,6 +25,7 @@ Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,
     timer->start();
 
     axis_values = new double[4]{0,0,0,0};
+    btns = new int[12]{0,1,2,3,4,5,6};
 }
 
 void Joystick::startListening(){
@@ -62,20 +63,12 @@ void Joystick::update(){
              button_handeler(event->jbutton.button,false);
         }else if(event->type == SDL_JOYDEVICEREMOVED){
             qDebug() << "Disconnected";
-            //SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
             QMessageBox msgBox;
             msgBox.setText("Joystick Disconnected!");
             msgBox.exec();
-            (joyStick_disconnected());
         }else if(event->type == SDL_JOYDEVICEADDED){
             SDL_InitSubSystem(SDL_INIT_JOYSTICK);
             joy = SDL_JoystickOpen(id);
-            if(joy == nullptr){
-                connected = false;
-            }else{
-                (joyStick_connected());
-                connected = true;
-            }
         }
     }
 }
@@ -107,7 +100,7 @@ void Joystick::axis_Handeler(Axis ax, double value1, double value2){
 
 }
 void Joystick::button_handeler(int button, bool value){
-    if(button == shapesBtn)
+    if(button == btns[1])//shape
     {
         this->m_player1->takeSnapshot("shapes.jpeg");
         QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
@@ -115,14 +108,14 @@ void Joystick::button_handeler(int button, bool value){
         qDebug()<< out;
         this->isTrap->setText("hi");
     }
-    else if(button == autoBtn)
+    else if(button == btns[0]) //auto
     {
     }
-    else if(button == classifierBtn)
+    else if(button == btns[2]) //classifier
     {
         this->m_player2->takeSnapshot("classifier.jpeg");
     }
-    else if(button == lightBtn)
+    else if(button == btns[3]) //light
     {   if(lightFlag)
         {
             Topic t ("lights", new std_String("off"));
@@ -136,11 +129,11 @@ void Joystick::button_handeler(int button, bool value){
         lightFlag = !lightFlag;
 
     }
-    else if(button == camBtn && value)
+    else if(button == btns[6] && value) //cam
     {
         camFlag = true;
     }
-    else if(button == camBtn && !value)
+    else if(button == btns[6] && !value)
     {
         camFlag = false;
     }
@@ -155,11 +148,4 @@ QString Joystick::runProcess(QStringList params)
    qDebug() << QString (process->readAllStandardOutput());
     return QString(process->readAllStandardOutput());
 }
-void Joystick::joyStick_connected()
-{
 
-}
-void Joystick::joyStick_disconnected()
-{
-
-}

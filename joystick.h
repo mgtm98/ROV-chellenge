@@ -39,8 +39,7 @@ public:
     void axis_Handeler(Axis ax, double value1, double value2);
     void button_handeler(int button, bool value);
     QString runProcess(QStringList params);
-    void joyStick_connected();
-    void joyStick_disconnected();
+    int              *btns;//0 auto 1 shapes 2 clasifier 3 light 4 openbox 5 openlock 6 cam
 private:
     SDL_Joystick    *joy;
     SDL_Event       *event;

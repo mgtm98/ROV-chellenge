@@ -20,7 +20,7 @@
 #include "msg.h"
 #include "topic.h"
 #include <QProcess>
-
+#include "buttonsettings.h"
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -33,7 +33,7 @@ public:
     ~MainWindow();
 
 private:
-    QPushButton /**automationBtn,*coinsBtn,*shapeDetectionBtn,*lightOn,*lightOff,*updateDepthBtn,*/*camera1OffBtn,*camera1OnBtn,*camera2OffBtn,*camera2OnBtn;
+    QPushButton /**automationBtn,*coinsBtn,*shapeDetectionBtn,*lightOn,*lightOff,*updateDepthBtn,*/*camera1OffBtn,*camera1OnBtn,*camera2OffBtn,*camera2OnBtn,*setingsBtn;
     QLabel * coinNotxt,*coinNo,*adjustDepth,*camera1,*camera2;
     QLabel * sensorReadings,*depth,/**mode,*/*temp,*tempValue,*depthValue/*,*light,*up,*down,*/,*buttonSettings,*time,*sWatch,*trap,*metal,*trapVal,*metalVal;
    // QLineEdit *editDepth,*fix;
@@ -50,6 +50,7 @@ private:
     bool isAuto = false,istrap = false, isMetal = false;
     QRos *ros;
     Player *m_player1, *m_player2;
+    ButtonSettings *btnSettingsWindow;
 private slots:
     void sWatchHandler();
     //void autoBtnPressed();
@@ -57,7 +58,7 @@ private slots:
     //void shapeDetectionBtnPressed();
     //void toggleLightOn();
     //void toggleLightOff();
-    //void updateDepth();
+    void openWindow();
     void camera1OnPressed();
     void camera1OffPressed();
     void camera2OnPressed();

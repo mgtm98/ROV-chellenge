@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     connect(camera2OnBtn,SIGNAL(clicked()),this,SLOT(camera2OnPressed()));
     connect(camera1OffBtn,SIGNAL(clicked()),this,SLOT(camera1OffPressed()));
     connect(camera2OffBtn,SIGNAL(clicked()),this,SLOT(camera2OffPressed()));
+    connect(setingsBtn,SIGNAL(clicked()),this,SLOT(openWindow()));
+
 
     connect(timer,SIGNAL(timeout()),this,SLOT(sWatchHandler()));
     this->ros->subscrib("sensors","raw_data",[&](msg_I *m){
@@ -55,6 +57,7 @@ void MainWindow::initItems()
     QFont f2("Arial",12);
     QFont f3("Arial",15);
     m_player2 =new Player(nullptr,"udpsrc port=8001 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
+    setingsBtn = new QPushButton("Change");
     m_player1->setFixedHeight(500);
     m_player2->setFixedHeight(500);
 
@@ -190,6 +193,8 @@ void MainWindow::initItems()
     verLeftLayout->addWidget(trapVal,0,Qt::AlignCenter);
     verLeftLayout->addWidget(metal);
     verLeftLayout->addWidget(metalVal,0,Qt::AlignCenter);
+    verLeftLayout->addWidget(buttonSettings);
+    verLeftLayout->addWidget(setingsBtn);
 
     /*verLeftLayout ->addLayout(depthLayout);
     verLeftLayout ->addWidget(up);
@@ -279,10 +284,7 @@ QString MainWindow::runProcess(QStringList params)
 
     return  proc->readAllStandardOutput();
 }
-/*void MainWindow::setSensorReadings(msg_I *t){
-    raw_data *a = (raw_data *)t;
-    depthVal = a->x_speed;
-}*/
+
 /*void MainWindow::autoBtnPressed()
 {
     m_player1->takeSnapshot();
@@ -311,9 +313,10 @@ void MainWindow::toggleLightOff()
     //lightOff->setEnabled(false);
     //lightOn->setEnabled(true);
 
-}
-void MainWindow::updateDepth()
+}*/
+void MainWindow::openWindow()
 {
-
+    btnSettingsWindow = new ButtonSettings(this,my_joy->btns);
+    btnSettingsWindow->show();
 }
-*/
+
