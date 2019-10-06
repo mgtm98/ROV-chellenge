@@ -19,14 +19,15 @@
 #include <gst/gstsample.h>
 #include <gst/gstcaps.h>
 #include <gst/video/video.h>
+#include <QApplication>
 Player::Player(QWidget *parent, QString configure)
     : QGst::Ui::VideoWidget(parent)
 {
        this->configure = configure;
        m_pipeline      = QGst::Pipeline::create();
-       //m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
-      m_videoSink     = QGst::ElementFactory::make("appsink");
-       m_source = QGst::Bin::fromDescription(this->configure);
+       m_source        = QGst::ElementFactory::make("videotestsrc", "videotestsrc");
+      m_videoSink     = QGst::ElementFactory::make("qwidget5videosink");
+      // m_source = QGst::Bin::fromDescription(this->configure);
         // m_videoSink = QGst::Bin::fromDescription(this->configure);
        if (!m_pipeline || !m_source || !m_videoSink) {
            QMessageBox::critical(
@@ -128,10 +129,10 @@ void Player::handlePipelineStateChange(const QGst::StateChangedMessagePtr & scm)
     }
     Q_EMIT stateChanged();
 }
-void Player::takeSnapshot()
+void Player::takeSnapshot(QString imgName)
 {
     QDateTime currentDate = QDateTime::currentDateTime();
-        QString location = QString("%1/snap_%2.png").arg(QDir::homePath()).arg(currentDate.toString(Qt::ISODate));
+        QString location = QString(imgName).arg(QCoreApplication::applicationDirPath());
         QImage snapShot;
         QImage::Format snapFormat;
         QGlib::Value val = m_videoSink->property("last-sample");

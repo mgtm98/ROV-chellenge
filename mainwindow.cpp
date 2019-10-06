@@ -6,11 +6,10 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     m_player1 =new Player(nullptr,"udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec !  xvimagesink sync=false");
 
     initItems();
-    //my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2);
-<<<<<<< HEAD
+    my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2,coinNo,trapVal);
+
 //    this->ros->subscrib("sensors","raw_data",setSensorReadings);
-=======
->>>>>>> f45696bacab1c63ca0a18f210a864aa75c4692d2
+
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
     //connect(coinsBtn,SIGNAL(clicked()),this,SLOT(countCoinsBtnPressed()));
     //connect(shapeDetectionBtn,SIGNAL(clicked()),this,SLOT(shapeDetectionBtnPressed()));
@@ -19,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     //connect(updateDepthBtn,SIGNAL(clicked()),this,SLOT(updateDepth()));
     connect(camera1OnBtn,SIGNAL(clicked()),this,SLOT(camera1OnPressed()));
     connect(camera2OnBtn,SIGNAL(clicked()),this,SLOT(camera2OnPressed()));
-    connect(camera1OffBtn,SIGNAL(clicked()),this,SLOT(camera1OnPressed()));
-    connect(camera2OffBtn,SIGNAL(clicked()),this,SLOT(camera2OnPressed()));
+    connect(camera1OffBtn,SIGNAL(clicked()),this,SLOT(camera1OffPressed()));
+    connect(camera2OffBtn,SIGNAL(clicked()),this,SLOT(camera2OffPressed()));
 
     connect(timer,SIGNAL(timeout()),this,SLOT(sWatchHandler()));
     this->ros->subscrib("sensors","raw_data",[&](msg_I *m){
@@ -230,8 +229,9 @@ void MainWindow::camera1OnPressed()
 
 
        QString out = runProcess(params);
+       trapVal->setText(out);
      //  qDebug() << params;
-       qDebug() << out;
+      // qDebug() << out;
 
 }
 void MainWindow::camera1OffPressed()
@@ -254,12 +254,23 @@ void MainWindow::camera2OffPressed()
 }
 QString MainWindow::runProcess(QStringList params)
 {
+    QString res;
     QString path = QCoreApplication::applicationDirPath();
-    QProcess *process = new QProcess();
-    process->startDetached("python", params,path);
-    process->waitForFinished(-1);
-   //qDebug() << QString (process->readAll());
-    return process->readAll();
+    QProcess *proc = new QProcess();
+    proc->startDetached("python3", params,path);
+    proc->waitForFinished(1000);
+    qDebug() << proc->readAll();
+
+   // proc->write("dir");
+
+
+
+  //  process->waitForFinished(-1);
+    //res = process->readAllStandardOutput();
+
+       // qDebug() << QString(res)    ;
+
+    return  proc->readAllStandardOutput();
 }
 /*void MainWindow::setSensorReadings(msg_I *t){
     raw_data *a = (raw_data *)t;

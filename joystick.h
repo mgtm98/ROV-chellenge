@@ -9,7 +9,9 @@
 #include "SDL2/SDL_joystick.h"
 #include "ros.h"
 #include "player.h"
-
+#include <QLabel>
+#include <QProcess>
+#include <QApplication>
 #define x_Axis_id 0
 #define y_Axis_id 1
 #define z_Axis_id 2
@@ -29,11 +31,13 @@ class Joystick:public QObject{
 public:
     explicit Joystick(QObject *parent = nullptr);
     explicit Joystick(int id, QObject *parent = nullptr);
-    explicit Joystick(int id, int update_interval,QObject *parent = nullptr,QRos *ros = nullptr,Player *m_player1= nullptr,Player *m_player2= nullptr);
+    explicit Joystick(int id, int update_interval,QObject *parent = nullptr,QRos *ros = nullptr,
+                      Player *m_player1= nullptr,Player *m_player2= nullptr, QLabel * coins = nullptr, QLabel * isTrap = nullptr);
     void startListening();
     bool isConnected();
     void axis_Handeler(Axis ax, double value1, double value2);
     void button_handeler(int button, bool value);
+    QString runProcess(QStringList params);
 private:
     SDL_Joystick    *joy;
     SDL_Event       *event;
@@ -43,17 +47,16 @@ private:
     bool             lightFlag = false;
     bool             camFlag = false;
     double           *axis_values;
-    int              shapesBtn = 0;
-    int              autoBtn = 1;
+    int              shapesBtn = 1;
+    int              autoBtn = 0;
     int              classifierBtn = 2;
     int              lightBtn = 3;
     int              openBoxBtn = 4;
     int              openlockBtn = 5;
     int              camBtn = 6;
-    int              cam2Btn = 7;
     QRos             *ros;
-    Player *m_player1, *m_player2;
-
+    Player           *m_player1, *m_player2;
+    QLabel           *isTrap, *coins;
 
 signals:
 

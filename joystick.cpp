@@ -6,8 +6,11 @@ Joystick::Joystick(QObject *parent):Joystick(0,100,parent){
 Joystick::Joystick(int id, QObject *parent):Joystick(id,100,parent){
 }
 
-Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,Player *m_player1,Player *m_player2):QObject(parent),id(id){
+Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,
+                   Player *m_player1,Player *m_player2, QLabel *coins,QLabel *isTrap):QObject(parent),id(id){
     this->ros = ros;
+    this->coins = coins;
+    this->isTrap = isTrap;
     this->m_player1 = m_player1;
     this->m_player2 = m_player2;
     SDL_Init(SDL_INIT_JOYSTICK);
@@ -105,15 +108,18 @@ void Joystick::axis_Handeler(Axis ax, double value1, double value2){
 void Joystick::button_handeler(int button, bool value){
     if(button == shapesBtn)
     {
-        this->m_player2->takeSnapshot();
-
+        this->m_player1->takeSnapshot("shapes.jpeg");
+        QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
+        QString out = runProcess(params);
+        qDebug()<< out;
+        this->isTrap->setText("hi");
     }
     else if(button == autoBtn)
     {
     }
     else if(button == classifierBtn)
     {
-        this->m_player2->takeSnapshot();
+        this->m_player2->takeSnapshot("classifier.jpeg");
     }
     else if(button == lightBtn)
     {   if(lightFlag)
@@ -138,4 +144,13 @@ void Joystick::button_handeler(int button, bool value){
         camFlag = false;
     }
 
+}
+QString Joystick::runProcess(QStringList params)
+{
+    QString path = QCoreApplication::applicationDirPath();
+    QProcess *process = new QProcess();
+    process->startDetached("python3", params,path);
+    process->waitForFinished(-1);
+   qDebug() << QString (process->readAllStandardOutput());
+    return QString(process->readAllStandardOutput());
 }

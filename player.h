@@ -18,7 +18,7 @@ public Q_SLOTS:
     void play();
     void pause();
     void stop();
-    void takeSnapshot();
+    void takeSnapshot(QString imgName);
 Q_SIGNALS:
     void stateChanged();
 private:
