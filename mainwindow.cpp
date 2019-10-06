@@ -24,7 +24,23 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     connect(timer,SIGNAL(timeout()),this,SLOT(sWatchHandler()));
     this->ros->subscrib("sensors","raw_data",[&](msg_I *m){
         raw_data *a = (raw_data *)m;
-        this->depthVal = a->x_speed;
+        depthVal = a->x_speed;
+        depthValue->setText(QString::number(depthVal) + "m");
+        tempVal = a->y_speed;
+        tempValue->setText(QString::number(tempVal) + ".c");
+
+        if(a->z_speed == 0)
+        {
+            metalVal->setText("NO");
+            metalVal->setStyleSheet("QLabel {  color : red; }");
+
+        }
+        else if(a->z_speed == 1)
+        {
+            metalVal->setText("YES");
+            metalVal->setStyleSheet("QLabel {  color : green; }");
+
+        }
     });
 
     timer->start(1000);
@@ -258,17 +274,8 @@ QString MainWindow::runProcess(QStringList params)
     QString path = QCoreApplication::applicationDirPath();
     QProcess *proc = new QProcess();
     proc->startDetached("python3", params,path);
-    proc->waitForFinished(1000);
+    proc->waitForFinished();
     qDebug() << proc->readAll();
-
-   // proc->write("dir");
-
-
-
-  //  process->waitForFinished(-1);
-    //res = process->readAllStandardOutput();
-
-       // qDebug() << QString(res)    ;
 
     return  proc->readAllStandardOutput();
 }
