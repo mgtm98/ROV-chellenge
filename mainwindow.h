@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <functional>
 #include "joystick.h"
 #include <QTimer>
 #include <QTime>
