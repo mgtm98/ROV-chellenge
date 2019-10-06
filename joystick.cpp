@@ -19,8 +19,6 @@ Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,
     joy = SDL_JoystickOpen(id);
     if(joy == nullptr){
         connected = false;
-    }else{
-        emit(joyStick_connected());
     }
     connect(timer, SIGNAL(timeout()),this,SLOT(update()));
     timer->setInterval(update_interval);
@@ -64,15 +62,18 @@ void Joystick::update(){
              button_handeler(event->jbutton.button,false);
         }else if(event->type == SDL_JOYDEVICEREMOVED){
             qDebug() << "Disconnected";
-            SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-            emit(joyStick_disconnected());
+            //SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+            QMessageBox msgBox;
+            msgBox.setText("Joystick Disconnected!");
+            msgBox.exec();
+            (joyStick_disconnected());
         }else if(event->type == SDL_JOYDEVICEADDED){
             SDL_InitSubSystem(SDL_INIT_JOYSTICK);
             joy = SDL_JoystickOpen(id);
             if(joy == nullptr){
                 connected = false;
             }else{
-                emit(joyStick_connected());
+                (joyStick_connected());
                 connected = true;
             }
         }
@@ -153,4 +154,12 @@ QString Joystick::runProcess(QStringList params)
     process->waitForFinished(-1);
    qDebug() << QString (process->readAllStandardOutput());
     return QString(process->readAllStandardOutput());
+}
+void Joystick::joyStick_connected()
+{
+
+}
+void Joystick::joyStick_disconnected()
+{
+
 }

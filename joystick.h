@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QProcess>
 #include <QApplication>
+#include <QMessageBox>
 #define x_Axis_id 0
 #define y_Axis_id 1
 #define z_Axis_id 2
@@ -38,6 +39,8 @@ public:
     void axis_Handeler(Axis ax, double value1, double value2);
     void button_handeler(int button, bool value);
     QString runProcess(QStringList params);
+    void joyStick_connected();
+    void joyStick_disconnected();
 private:
     SDL_Joystick    *joy;
     SDL_Event       *event;
@@ -58,10 +61,7 @@ private:
     Player           *m_player1, *m_player2;
     QLabel           *isTrap, *coins;
 
-signals:
 
-    void joyStick_connected();
-    void joyStick_disconnected();
 
 private slots:
     void update();
