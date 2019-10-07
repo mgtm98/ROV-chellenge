@@ -6,7 +6,7 @@ from board import SCL, SDA
 import busio
 from adafruit_pca9685 import PCA9685
 from PID import PID
-from depthControl import get_depth
+from sensors import get_depth_temp
 
 # removed x_movement and y_movement functions and implemented 
 # the movement functionality in the callback function
@@ -21,7 +21,7 @@ def depthHandeler(z_motionMsg):
     while True:
         target = z_motionMsg.z_speed
         max_value = 200
-        current, _ = get_depth()
+        current, _ = get_depth_temp()
         pwm = pid.update(target - current)
         if abs(pwm) > max_value : pwm = max_value
         pwm /= max_value
