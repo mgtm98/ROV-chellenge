@@ -13,6 +13,8 @@
 #include <QProcess>
 #include <QApplication>
 #include <QMessageBox>
+#include <QFile>
+
 #define x_Axis_id 0
 #define y_Axis_id 1
 #define z_Axis_id 2

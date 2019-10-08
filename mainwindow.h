@@ -21,6 +21,7 @@
 #include "topic.h"
 #include <QProcess>
 #include "buttonsettings.h"
+#include <QFile>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

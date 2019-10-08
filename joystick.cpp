@@ -105,8 +105,7 @@ void Joystick::button_handeler(int button, bool value){
         this->m_player1->takeSnapshot("shapes.jpeg");
         QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
         QString out = runProcess(params);
-        qDebug()<< out;
-        this->isTrap->setText("hi");
+        this->isTrap->setText(out);
     }
     else if(button == btns[0]) //auto
     {
@@ -141,11 +140,22 @@ void Joystick::button_handeler(int button, bool value){
 }
 QString Joystick::runProcess(QStringList params)
 {
+    QString output;
     QString path = QCoreApplication::applicationDirPath();
-    QProcess *process = new QProcess();
-    process->startDetached("python3", params,path);
-    process->waitForFinished(-1);
-   qDebug() << QString (process->readAllStandardOutput());
-    return QString(process->readAllStandardOutput());
+    QProcess *proc = new QProcess();
+    proc->startDetached("python3", params,path);
+    proc->waitForFinished(-1);
+    QFile inputFile("out.txt");
+    if(inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        while(!in.atEnd())
+        {
+             output = in.readLine();
+        }
+    }
+    inputFile.close();
+
+    return  output;
 }
 

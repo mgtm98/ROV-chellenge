@@ -3,12 +3,10 @@ MainWindow::MainWindow(QWidget *parent,QRos *ros) :
     QMainWindow(parent)
 {
     this->ros = ros;
-    m_player1 =new Player(nullptr,"udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec !  xvimagesink sync=false");
+    m_player1 =new Player(this,"udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! autovideosink");
 
     initItems();
     my_joy = new Joystick(0,100,nullptr,ros,m_player1,m_player2,coinNo,trapVal);
-
-//    this->ros->subscrib("sensors","raw_data",setSensorReadings);
 
     //connect(automationBtn,SIGNAL(clicked()),this,SLOT(autoBtnPressed()));
     //connect(coinsBtn,SIGNAL(clicked()),this,SLOT(countCoinsBtnPressed()));
@@ -245,14 +243,7 @@ void MainWindow::sWatchHandler()
 void MainWindow::camera1OnPressed()
 {
 
-        //this->m_player1->play();
-       QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
-
-
-       QString out = runProcess(params);
-       trapVal->setText(out);
-     //  qDebug() << params;
-      // qDebug() << out;
+       this->m_player1->play();
 
 }
 void MainWindow::camera1OffPressed()
@@ -272,17 +263,6 @@ void MainWindow::camera2OffPressed()
 
         this->m_player2->pause();
 
-}
-QString MainWindow::runProcess(QStringList params)
-{
-    QString res;
-    QString path = QCoreApplication::applicationDirPath();
-    QProcess *proc = new QProcess();
-    proc->startDetached("python3", params,path);
-    proc->waitForFinished();
-    qDebug() << proc->readAll();
-
-    return  proc->readAllStandardOutput();
 }
 
 /*void MainWindow::autoBtnPressed()
