@@ -222,7 +222,6 @@ void MainWindow::initItems()
 }
 void MainWindow::sWatchHandler()
 {
-    m_player1->play();
     if(seconds == 0){
         seconds = 60;
         minutes --;
