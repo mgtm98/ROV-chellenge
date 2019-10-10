@@ -6,8 +6,11 @@ Joystick::Joystick(QObject *parent):Joystick(0,100,parent){
 Joystick::Joystick(int id, QObject *parent):Joystick(id,100,parent){
 }
 
-Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,Player *m_player1,Player *m_player2):QObject(parent),id(id){
+Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,
+                   Player *m_player1,Player *m_player2, QLabel *coins,QLabel *isTrap):QObject(parent),id(id){
     this->ros = ros;
+    this->coins = coins;
+    this->isTrap = isTrap;
     this->m_player1 = m_player1;
     this->m_player2 = m_player2;
     SDL_Init(SDL_INIT_JOYSTICK);
@@ -16,14 +19,13 @@ Joystick::Joystick(int id, int update_interval, QObject *parent,QRos *ros ,Playe
     joy = SDL_JoystickOpen(id);
     if(joy == nullptr){
         connected = false;
-    }else{
-        emit(joyStick_connected());
     }
     connect(timer, SIGNAL(timeout()),this,SLOT(update()));
     timer->setInterval(update_interval);
     timer->start();
 
     axis_values = new double[4]{0,0,0,0};
+    btns = new int[12]{0,1,2,3,4,5,6};
 }
 
 void Joystick::startListening(){
@@ -61,17 +63,12 @@ void Joystick::update(){
              button_handeler(event->jbutton.button,false);
         }else if(event->type == SDL_JOYDEVICEREMOVED){
             qDebug() << "Disconnected";
-            SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-            emit(joyStick_disconnected());
+            QMessageBox msgBox;
+            msgBox.setText("Joystick Disconnected!");
+            msgBox.exec();
         }else if(event->type == SDL_JOYDEVICEADDED){
             SDL_InitSubSystem(SDL_INIT_JOYSTICK);
             joy = SDL_JoystickOpen(id);
-            if(joy == nullptr){
-                connected = false;
-            }else{
-                emit(joyStick_connected());
-                connected = true;
-            }
         }
     }
 }
@@ -103,19 +100,21 @@ void Joystick::axis_Handeler(Axis ax, double value1, double value2){
 
 }
 void Joystick::button_handeler(int button, bool value){
-    if(button == shapesBtn)
+    if(button == btns[1])//shape
     {
-        this->m_player2->takeSnapshot();
-
+        this->m_player1->takeSnapshot("shapes.jpeg");
+        QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
+        QString out = runProcess(params);
+        this->isTrap->setText(out);
     }
-    else if(button == autoBtn)
+    else if(button == btns[0]) //auto
     {
     }
-    else if(button == classifierBtn)
+    else if(button == btns[2]) //classifier
     {
-        this->m_player2->takeSnapshot();
+        this->m_player2->takeSnapshot("classifier.jpeg");
     }
-    else if(button == lightBtn)
+    else if(button == btns[3]) //light
     {   if(lightFlag)
         {
             Topic t ("lights", new std_String("off"));
@@ -129,13 +128,33 @@ void Joystick::button_handeler(int button, bool value){
         lightFlag = !lightFlag;
 
     }
-    else if(button == camBtn && value)
+    else if(button == btns[6] && value) //cam
     {
         camFlag = true;
     }
-    else if(button == camBtn && !value)
+    else if(button == btns[6] && !value)
     {
         camFlag = false;
     }
 
+}
+QString Joystick::runProcess(QStringList params)
+{
+    QString output;
+    QString path = QCoreApplication::applicationDirPath();
+    QProcess *proc = new QProcess();
+    proc->startDetached("python3", params,path);
+    proc->waitForFinished(-1);
+    QFile inputFile("out.txt");
+    if(inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        while(!in.atEnd())
+        {
+             output = in.readLine();
+        }
+    }
+    inputFile.close();
+
+    return  output;
 }
