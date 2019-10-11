@@ -221,13 +221,8 @@ void MainWindow::sWatchHandler()
 void MainWindow::camera1OnPressed()
 {
 
-        //this->m_player1->play();
-       QStringList params = { "img.py", "--image",  "test.jpeg","--line", "0", "--triangle", "1", "--square", "3", "--circle", "1"  };
-
-
-       QString out = runProcess(params);
-       qDebug() << params;
-       qDebug() << out;
+       this->m_player1->play();
+       
 
 }
 void MainWindow::camera1OffPressed()
