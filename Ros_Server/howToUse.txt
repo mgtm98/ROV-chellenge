@@ -1,0 +1,54 @@
+1- add server.py, network_config.py and network_config.py to your ros files
+2- in network_config.py file add Functions to 
+    a) Topic subscribtions handlers
+        def a function to make the json file which will be sent to the client
+        in subscribe_handlers_table add the function and make it's key the topic name 
+    b) Service request handlers
+        def a function to make the json file which will be sent to the client
+        in services_handlers_table add the function and make it's key the service name 
+    c) general Configs
+        in msgTypes add all msg classes and make it's key the msg name 
+        in srvTypes add all srv classes and make it's key the srv name 
+3- in network_ros.py in publish func add new elif branch to configure new msg type publishing
+
+JSON Files formats 
+    1) publish a Topic
+        {
+            "type" : "topic_publish",
+            "topic_name" : $the_topic_name,
+            "msg-type" : $msg_type,
+            "msg" : $msg_object
+        }
+    2) subscribing to a Topic
+        {
+            "type" : "topic_subscribe",
+            "topic_name" : $the_topic_name,
+            "msg-type" : $msg_type,
+        }
+    3) Topic response
+        {        
+            "type" : "topic_response",
+            "topic_name" : $the_topic_name,
+            "msg" : {
+                "type" : $msg_type,
+                "data" : $msg_object
+            },
+        }
+    4) Service request (from QRos to server)
+        {
+            "type" : "service_request",
+            "srv_name" : $srv_name,
+            "data" : $srv_request_object
+        }
+    5) Service Respond (from server to QRos)
+        {
+            "type" : "srv-response",
+            "srv-name" : $srv_name,
+            "response" : $srv_respond_object  
+        }
+Summary :
+    default msg types handled by Ros is std_msgs/String & std_msgs/Empty
+    to add new msg :
+        a) in msgTypes (network_config.py) add the class name with it's name as a key (needed in publishing and subscribing)
+        b) creat a handler function and add it to subscribe_handlers_table  (needed in subscribing)
+        c) add an elif branch (network_ros.py publish) to creat the msg (needed in publishing)

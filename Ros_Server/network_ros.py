@@ -4,6 +4,7 @@ import rospy
 import json
 import threading
 from network_config import *
+
 from server import Server
 
 
@@ -37,18 +38,50 @@ def publish(data):
         if data["topic_name"] in topics:
             topics[data["topic_name"]].publish(data["msg"]["String"])
         else:
+            print("[INFO]    creating new topic",data["topic_name"])
             topics[data["topic_name"]] = rospy.Publisher(data["topic_name"],msgTypes[data["msg-type"]],queue_size=5)
             topics[data["topic_name"]].publish(data["msg"]["String"])
         
     elif(data["msg-type"] == "std_msgs/Empty"):
         if data["topic_name"] in topics:
             topics[data["topic_name"]].publish()
-            # print("already in topics")
         else:
             print("[INFO]    creating new topic",data["topic_name"])
             topics[data["topic_name"]] = rospy.Publisher(data["topic_name"],msgTypes[data["msg-type"]],queue_size=5)
             topics[data["topic_name"]].publish()
+
+    elif(data["msg-type"] == "rov20/pln_motion"):
+        if data["topic_name"] in topics:
+            msgObject = pln_motion()
+            pln_motion.x_speed = data["msg"]["s_speed"]
+            pln_motion.y_speed = data["msg"]["y_speed"]
+            topics[data["topic_name"]].publish(msgObject)
+        else:
+            print("[INFO]    creating new topic",data["topic_name"])
+            topics[data["topic_name"]] = rospy.Publisher(data["topic_name"],msgTypes[data["msg-type"]],queue_size=5)
+            msgObject = pln_motion()
+            pln_motion.x_speed = data["msg"]["s_speed"]
+            pln_motion.y_speed = data["msg"]["y_speed"]
+            topics[data["topic_name"]].publish(msgObject)
+
+    # Example
+    # elif(data["msg-type"] == $msgName):
+    #     if data["topic_name"] in topics:
+    #         msgObject = msgClass()
+    #         msgObject.field1 = data["msg"]["field1"]
+    #         msgObject.fieldX = data["msg"]["fieldX"]
+    #         topics[data["topic_name"]].publish(msgObject)
+    #     else:
+    #         print("[INFO]    creating new topic",data["topic_name"])
+    #         topics[data["topic_name"]] = rospy.Publisher(data["topic_name"],msgTypes[data["msg-type"]],queue_size=5)
+    #         msgObject = msgClass()
+    #         msgObject.field1 = data["msg"]["field1"]
+    #         msgObject.fieldX = data["msg"]["fieldX"]
+    #         topics[data["topic_name"]].publish(msgObject)
+    
     print("[INFO]    Publishing in topic "+data["topic_name"])
+
+    
 
 def update():
     for topic_name in subscribers:
